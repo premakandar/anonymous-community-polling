@@ -25,4 +25,5 @@
 - [x] Product proposal (Anonymous Feedback / Survey)
 - [x] Polished PulseBoard SaaS UI (landing, dashboard, board, history, settings)
 - [x] Loading / success / error / empty / disconnected states on board flow
-- [ ] Demo video URL in README (add after upload)
+- [x] Demo video: https://youtu.be/UpCOUF-9nWQ
+- [x] README screenshots (landing, dashboard, board, history, settings)

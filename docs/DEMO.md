@@ -3,7 +3,7 @@
 ## YouTube
 **Title:** PulseBoard — Anonymous Community Polling on Midnight (ZK Demo)
 
-**URL:** _paste your YouTube link here after upload_
+**URL:** https://youtu.be/UpCOUF-9nWQ
 
 ## Suggested chapters
 - Intro & landing
