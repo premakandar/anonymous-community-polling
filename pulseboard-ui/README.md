@@ -10,7 +10,7 @@
 | `/history` | Local activity trail |
 | `/settings` | Contract override + env endpoints |
 
-## Env (`bboard-ui/.env.example`)
+## Env (`pulseboard-ui/.env.example`)
 
 ```
 VITE_NETWORK_ID=undeployed
@@ -30,4 +30,4 @@ npm run compile   # or: npm run compact -w @midnight-ntwrk/bboard-contract
 npm run dev       # http://localhost:5173
 ```
 
-Unlock Lace before Deploy/Join. ZK keys are copied to `bboard-ui/public/{keys,zkir}` on predev/prebuild.
+Unlock Lace before Deploy/Join. ZK keys are copied to `pulseboard-ui/public/{keys,zkir}` on predev/prebuild.

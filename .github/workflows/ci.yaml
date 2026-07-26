@@ -53,12 +53,12 @@ jobs:
         run: |
           npm run ci
 
-      - name: Compile bboard-cli
-        working-directory: bboard-cli
+      - name: Compile pulseboard-cli
+        working-directory: pulseboard-cli
         run: |
           npm run ci
 
-      - name: Compile bboard-ui
-        working-directory: bboard-ui
+      - name: Compile pulseboard-ui
+        working-directory: pulseboard-ui
         run: |
           npm run ci

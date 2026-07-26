@@ -10,16 +10,16 @@
   },
   "workspaces": {
     "packages": [
-      "bboard-cli",
-      "bboard-ui",
+      "pulseboard-cli",
+      "pulseboard-ui",
       "api",
       "contract"
     ]
   },
   "scripts": {
     "compile": "npm run compact --workspace=@midnight-ntwrk/bboard-contract",
-    "dev": "npm run dev --workspace=@midnight-ntwrk/bboard-ui",
-    "build": "npm run build --workspace=@midnight-ntwrk/bboard-ui",
+    "dev": "npm run dev --workspace=@midnight-ntwrk/pulseboard-ui",
+    "build": "npm run build --workspace=@midnight-ntwrk/pulseboard-ui",
     "test": "npm run test --workspace=@midnight-ntwrk/bboard-contract",
     "typecheck": "npm run typecheck --workspaces --if-present"
   },

@@ -2,7 +2,7 @@
 
 ## Local (undeployed) — working path
 - Compile Compact contract
-- Start proof server / indexer via Docker (`bboard-cli` compose / proof-server yml)
+- Start proof server / indexer via Docker (`pulseboard-cli` compose / proof-server yml)
 - Run PulseBoard UI: `npm run dev`
 - Unlock Lace → Deploy or Join → Post / Take down
 

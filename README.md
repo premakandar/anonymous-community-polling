@@ -6,7 +6,7 @@ Users post a single public community message at a time. Ownership is proven with
 
 ## Product UI (Level 2)
 
-**PulseBoard** SaaS console in `bboard-ui/`:
+**PulseBoard** SaaS console in `pulseboard-ui/`:
 
 | Route | Job |
 | --- | --- |
@@ -22,7 +22,7 @@ npm run compile
 npm run dev   # http://localhost:5173 — unlock Lace first
 ```
 
-Env template: `bboard-ui/.env.example` (indexer / proof-server / contract address).
+Env template: `pulseboard-ui/.env.example` (indexer / proof-server / contract address).
 
 | Variable | Purpose |
 | --- | --- |
@@ -45,8 +45,8 @@ anonymous-community-polling/
 │       ├── witnesses.ts
 │       └── managed/bboard/
 ├── api/                      # Shared deploy/join/post/takeDown API
-├── bboard-cli/               # Node CLI (standalone / preview / preprod)
-├── bboard-ui/                # PulseBoard Vite + React SaaS console
+├── pulseboard-cli/               # Node CLI (standalone / preview / preprod)
+├── pulseboard-ui/                # PulseBoard Vite + React SaaS console
 │   └── src/pages/            # Landing, Dashboard, Board, History, Settings
 ├── docs/                     # Privacy, proposal, checklist, preprod notes
 ├── package.json              # npm workspaces root
@@ -131,7 +131,7 @@ Compiling 2 circuits:
 ### Build the CLI Interface
 
 ```bash
-cd bboard-cli
+cd pulseboard-cli
 npm run build
 cd ..
 ```
@@ -141,7 +141,7 @@ cd ..
 Only needed if you want to use the web interface:
 
 ```bash
-cd bboard-ui
+cd pulseboard-ui
 npm run build
 cd ..
 ```
@@ -153,7 +153,7 @@ cd ..
 The CLI requires a local proof server running in Docker:
 
 ```bash
-cd bboard-cli
+cd pulseboard-cli
 docker compose -f proof-server-local.yml up -d
 ```
 
@@ -231,7 +231,7 @@ The web interface uses the same proof server and requires additional browser set
 If you haven't started the proof server for the CLI, start it now:
 
 ```bash
-cd bboard-cli
+cd pulseboard-cli
 docker compose -f proof-server-local.yml up -d
 cd ..
 ```
@@ -247,7 +247,7 @@ docker ps
 The UI can run against preprod or preview networks:
 
 ```bash
-cd bboard-ui
+cd pulseboard-ui
 
 # For preprod network
 npm run build:start
@@ -306,7 +306,7 @@ The UI will be available at:
 | [`docs/SUBMISSION_CHECKLIST.md`](./docs/SUBMISSION_CHECKLIST.md) | Level 1 / 2 / 3 checklist |
 | [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) | Preprod sync blocker notes |
 | [`docs/DEMO.md`](./docs/DEMO.md) | YouTube demo title + chapter outline |
-| [`bboard-ui/.env.example`](./bboard-ui/.env.example) | UI env template |
+| [`pulseboard-ui/.env.example`](./pulseboard-ui/.env.example) | UI env template |
 
 ## Implementation Notes
 
