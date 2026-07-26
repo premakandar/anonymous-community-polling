@@ -83,6 +83,16 @@ body {
   animation: fade-in 0.9s ease both;
 }
 
+.pulse-dot {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+.flow-line {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background-size: 200% 100%;
+  animation: flow-line 3.2s linear infinite;
+}
+
 @keyframes slide-up {
   from {
     opacity: 0;
@@ -103,9 +113,32 @@ body {
   }
 }
 
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes flow-line {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .slide-up,
-  .fade-in {
+  .fade-in,
+  .pulse-dot,
+  .flow-line {
     animation: none;
   }
 }

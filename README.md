@@ -24,19 +24,33 @@ npm run dev   # http://localhost:5173 — unlock Lace first
 
 Env template: `bboard-ui/.env.example` (indexer / proof-server / contract address).
 
+| Variable | Purpose |
+| --- | --- |
+| `VITE_NETWORK_ID` | `undeployed` / `preview` / `preprod` |
+| `VITE_CONTRACT_ADDRESS` | Optional default join address |
+| `VITE_INDEXER_URI` | Indexer GraphQL (local or remote) |
+| `VITE_INDEXER_WS_URI` | Indexer websocket |
+| `VITE_PROOF_SERVER_URL` | Proof server (e.g. `http://127.0.0.1:6300`) |
+| `VITE_LOGGING_LEVEL` | `info` / `trace` |
+
 ---
 
 ## Project Structure
 
 ```
-bulletin-board/
-├── contract/               # Smart contract in Compact language
-│   └── src/               # Contract source and utilities
-├── api/                   # Methods, classes and types for CLI and UI
-├── bboard-cli/            # Command-line interface
-│   └── src/               # CLI implementation
-└── bboard-ui/             # Web browser interface
-    └── src/               # Web UI implementation
+anonymous-community-polling/
+├── contract/                 # Compact board + managed ZK artifacts
+│   └── src/
+│       ├── bboard.compact
+│       ├── witnesses.ts
+│       └── managed/bboard/
+├── api/                      # Shared deploy/join/post/takeDown API
+├── bboard-cli/               # Node CLI (standalone / preview / preprod)
+├── bboard-ui/                # PulseBoard Vite + React SaaS console
+│   └── src/pages/            # Landing, Dashboard, Board, History, Settings
+├── docs/                     # Privacy, proposal, checklist, preprod notes
+├── package.json              # npm workspaces root
+└── README.md
 ```
 
 ## Prerequisites
@@ -282,6 +296,17 @@ The UI will be available at:
 - Proof server (Docker) is required for both CLI and UI to generate zero-knowledge proofs
 - Contract must be compiled before building CLI or UI
 - Fund your wallet using the testnet faucet before deploying contracts
+
+## Documentation index
+
+| Doc | Purpose |
+| --- | --- |
+| [`docs/PRIVACY_MODEL.md`](./docs/PRIVACY_MODEL.md) | Public vs private ledger claims |
+| [`docs/PRODUCT_PROPOSAL.md`](./docs/PRODUCT_PROPOSAL.md) | Level 3 Anonymous Feedback / Survey proposal |
+| [`docs/SUBMISSION_CHECKLIST.md`](./docs/SUBMISSION_CHECKLIST.md) | Level 1 / 2 / 3 checklist |
+| [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) | Preprod sync blocker notes |
+| [`docs/DEMO.md`](./docs/DEMO.md) | YouTube demo title + chapter outline |
+| [`bboard-ui/.env.example`](./bboard-ui/.env.example) | UI env template |
 
 ## Implementation Notes
 
