@@ -35,11 +35,13 @@ Env template: `pulseboard-ui/.env.example` (indexer / proof-server / contract ad
 
 ### Vercel
 
-Repo root `vercel.json` builds the UI workspace (`pulseboard-ui/dist`). In the Vercel project:
+Vercel often auto-sets **Root Directory** to `pulseboard-ui` — that is fine.
 
-**Settings → Build and Deployment → Root Directory** must be **empty** (repository root), not `bboard-ui` (that folder was renamed to `pulseboard-ui`).
+- Config used in that case: `pulseboard-ui/vercel.json` (installs from repo root, outputs `dist`)
+- Commit `contract/src/managed/` (ZK keys + TS bindings) — Vercel has no Compact compiler
+- Env: same `VITE_*` keys as above
 
-Then Redeploy. Optional env: same `VITE_*` keys as above.
+If Root Directory is empty instead, root `vercel.json` is used (`outputDirectory`: `pulseboard-ui/dist`).
 
 ---
 

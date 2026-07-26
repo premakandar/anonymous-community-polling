@@ -5,3 +5,4 @@
   "outputDirectory": "pulseboard-ui/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
+
