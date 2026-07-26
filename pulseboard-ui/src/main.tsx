@@ -2,12 +2,12 @@ import './globals';
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { setNetworkId, type NetworkId } from '@midnight-ntwrk/midnight-js-network-id';
+import { setNetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import '@midnight-ntwrk/dapp-connector-api';
 import App from './App';
 import { logger } from './logger';
 
-const networkId = (import.meta.env.VITE_NETWORK_ID as NetworkId) || ('undeployed' as NetworkId);
+const networkId = import.meta.env.VITE_NETWORK_ID || 'undeployed';
 setNetworkId(networkId);
 logger.trace(`networkId = ${networkId}`);
 

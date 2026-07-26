@@ -58,8 +58,8 @@ export function BoardPage() {
           <Surface>
             <h2 className="font-display text-xl">Deploy a new board</h2>
             <p className="mt-2 text-sm text-[var(--ink-muted)]">
-              Creates a fresh bulletin contract. Your secret key is generated locally and never
-              written to the public ledger.
+              Creates a fresh bulletin contract. Your secret key is generated locally and never written to the public
+              ledger.
             </p>
             <Button className="mt-6" onClick={deploy} disabled={status === 'connecting'}>
               {status === 'connecting' ? (
@@ -74,8 +74,8 @@ export function BoardPage() {
           <Surface>
             <h2 className="font-display text-xl">Join existing board</h2>
             <p className="mt-2 text-sm text-[var(--ink-muted)]">
-              Paste a deployed contract address. If you were the poster, your private state can
-              prove ownership for take-down.
+              Paste a deployed contract address. If you were the poster, your private state can prove ownership for
+              take-down.
             </p>
             <label className="mt-5 block text-xs font-semibold uppercase tracking-[0.12em] text-[var(--ink-faint)]">
               Contract address
@@ -139,11 +139,7 @@ export function BoardPage() {
                   placeholder="Community question, pulse, or feedback…"
                   disabled={busy}
                 />
-                <Button
-                  className="mt-4"
-                  onClick={() => void onPost()}
-                  disabled={busy || !message.trim()}
-                >
+                <Button className="mt-4" onClick={() => void onPost()} disabled={busy || !message.trim()}>
                   {busy ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" /> Proving…

@@ -1,20 +1,9 @@
 import { cn } from '../../lib/utils';
 import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react';
 
-export function Surface({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
+export function Surface({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <div
-      className={cn(
-        'rounded-[var(--radius)] border border-[var(--line)] bg-[var(--paper)] p-5',
-        className,
-      )}
-    >
+    <div className={cn('rounded-[var(--radius)] border border-[var(--line)] bg-[var(--paper)] p-5', className)}>
       {children}
     </div>
   );
@@ -59,9 +48,7 @@ export function PageHeader({
     <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="font-display text-3xl tracking-tight sm:text-4xl">{title}</h1>
-        {description ? (
-          <p className="mt-1.5 max-w-2xl text-sm text-[var(--ink-muted)]">{description}</p>
-        ) : null}
+        {description ? <p className="mt-1.5 max-w-2xl text-sm text-[var(--ink-muted)]">{description}</p> : null}
       </div>
       {action}
     </div>

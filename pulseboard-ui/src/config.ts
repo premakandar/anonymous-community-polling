@@ -23,15 +23,15 @@ export function networkLabel(networkId: string): string {
 }
 
 export function loadConfig(): AppConfig {
-  const envAddress = (import.meta.env.VITE_CONTRACT_ADDRESS as string | undefined)?.trim() || null;
+  const envAddress = import.meta.env.VITE_CONTRACT_ADDRESS?.trim() || null;
   const override = localStorage.getItem(CONTRACT_KEY)?.trim() || null;
   return {
-    networkId: (import.meta.env.VITE_NETWORK_ID as string | undefined) || 'undeployed',
+    networkId: import.meta.env.VITE_NETWORK_ID || 'undeployed',
     contractAddress: override || envAddress,
-    indexerUri: (import.meta.env.VITE_INDEXER_URI as string | undefined)?.trim() || null,
-    indexerWsUri: (import.meta.env.VITE_INDEXER_WS_URI as string | undefined)?.trim() || null,
-    proofServerUri: (import.meta.env.VITE_PROOF_SERVER_URL as string | undefined)?.trim() || null,
-    loggingLevel: (import.meta.env.VITE_LOGGING_LEVEL as string | undefined) || 'info',
+    indexerUri: import.meta.env.VITE_INDEXER_URI?.trim() || null,
+    indexerWsUri: import.meta.env.VITE_INDEXER_WS_URI?.trim() || null,
+    proofServerUri: import.meta.env.VITE_PROOF_SERVER_URL?.trim() || null,
+    loggingLevel: import.meta.env.VITE_LOGGING_LEVEL || 'info',
   };
 }
 
@@ -41,5 +41,4 @@ export function saveContractAddressOverride(address: string | null) {
   window.dispatchEvent(new Event('pulseboard:config'));
 }
 
-export const LACE_STORE_URL =
-  'https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk';
+export const LACE_STORE_URL = 'https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk';

@@ -7,8 +7,7 @@ import { networkLabel } from '../config';
 import { shortAddr } from '../lib/utils';
 
 export function DashboardPage() {
-  const { config, status, api, boardState, error, deploy, join, isVacant, isOccupied } =
-    useBoardSession();
+  const { config, status, api, boardState, error, deploy, join, isVacant, isOccupied } = useBoardSession();
 
   return (
     <div>
@@ -42,36 +41,24 @@ export function DashboardPage() {
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Surface>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-            Network
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">Network</p>
           <p className="mt-2 font-display text-xl">{networkLabel(config.networkId)}</p>
         </Surface>
         <Surface>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-            Session
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">Session</p>
           <p className="mt-2 font-display text-xl capitalize">{status}</p>
           <p className="mt-1 truncate text-xs text-[var(--ink-muted)]">
             {api ? shortAddr(api.deployedContractAddress, 14, 8) : 'No contract attached'}
           </p>
         </Surface>
         <Surface>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-            Board
-          </p>
-          <p className="mt-2 font-display text-xl">
-            {isVacant ? 'Vacant' : isOccupied ? 'Occupied' : '—'}
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">Board</p>
+          <p className="mt-2 font-display text-xl">{isVacant ? 'Vacant' : isOccupied ? 'Occupied' : '—'}</p>
           {boardState?.isOwner ? <Badge tone="accent">You are owner</Badge> : null}
         </Surface>
         <Surface>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-            Sequence
-          </p>
-          <p className="mt-2 font-display text-xl">
-            {boardState ? boardState.sequence.toString() : '—'}
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">Sequence</p>
+          <p className="mt-2 font-display text-xl">{boardState ? boardState.sequence.toString() : '—'}</p>
         </Surface>
       </div>
 
@@ -99,9 +86,7 @@ export function DashboardPage() {
             <div>
               <h2 className="font-display text-lg">Contract</h2>
               <p className="mt-1 break-all font-mono text-xs text-[var(--ink-muted)]">
-                {api?.deployedContractAddress ??
-                  config.contractAddress ??
-                  'Not set — deploy, join, or open Settings'}
+                {api?.deployedContractAddress ?? config.contractAddress ?? 'Not set — deploy, join, or open Settings'}
               </p>
             </div>
             <Badge tone="neutral">Config</Badge>

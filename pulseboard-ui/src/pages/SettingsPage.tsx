@@ -20,8 +20,8 @@ export function SettingsPage() {
         <Surface>
           <h2 className="font-display text-xl">Contract address</h2>
           <p className="mt-2 text-sm text-[var(--ink-muted)]">
-            Override <code className="font-mono text-xs">VITE_CONTRACT_ADDRESS</code> for this
-            browser. Used as the default join target.
+            Override <code className="font-mono text-xs">VITE_CONTRACT_ADDRESS</code> for this browser. Used as the
+            default join target.
           </p>
           <Input
             className="mt-4 font-mono text-xs"
@@ -71,9 +71,7 @@ export function SettingsPage() {
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Indexer</dt>
-              <dd className="max-w-[60%] break-all text-right font-mono text-xs">
-                {config.indexerUri ?? 'From Lace'}
-              </dd>
+              <dd className="max-w-[60%] break-all text-right font-mono text-xs">{config.indexerUri ?? 'From Lace'}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Proof server</dt>
@@ -96,8 +94,7 @@ export function SettingsPage() {
           </a>
           <p className="mt-4 text-xs leading-relaxed text-[var(--ink-muted)]">
             Unlock Lace before deploy/join. For local undepolyed, point Lace proof server to{' '}
-            <code className="font-mono">http://localhost:6300</code> and run the project Docker
-            stack.
+            <code className="font-mono">http://localhost:6300</code> and run the project Docker stack.
           </p>
           <Badge tone="warn">Preprod sync may block — see README</Badge>
         </Surface>

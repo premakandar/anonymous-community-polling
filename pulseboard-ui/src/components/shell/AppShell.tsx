@@ -1,14 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  MessageSquareText,
-  ScrollText,
-  Settings,
-  Menu,
-  X,
-  Radio,
-} from 'lucide-react';
+import { LayoutDashboard, MessageSquareText, ScrollText, Settings, Menu, X, Radio } from 'lucide-react';
 import { cn, shortAddr } from '../../lib/utils';
 import { Badge } from '../ui/surface';
 import { useBoardSession } from '../../contexts/BoardSessionContext';
@@ -37,10 +29,7 @@ function SessionChip() {
   }
   if (status === 'failed') {
     return (
-      <span
-        className="hidden max-w-[220px] truncate text-xs text-[var(--danger)] lg:inline"
-        title={error ?? ''}
-      >
+      <span className="hidden max-w-[220px] truncate text-xs text-[var(--danger)] lg:inline" title={error ?? ''}>
         {error ?? 'Connection failed'}
       </span>
     );
@@ -95,9 +84,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="border-t border-[var(--line)] p-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-            Network
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--ink-faint)]">Network</p>
           <p className="mt-1.5 text-sm font-medium">{networkLabel(config.networkId)}</p>
           <a
             href={LACE_STORE_URL}

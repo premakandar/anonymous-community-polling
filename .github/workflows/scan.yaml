@@ -1,14 +1,12 @@
 name: Scan
 permissions: {}
 
+# Security scan only — not on every push/PR (CI handles that).
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch: {}   # so you can still run it manually
+  workflow_dispatch: {}
   schedule:
-    - cron: "0 0 * * *"   # run daily at midnight UTC
+    - cron: "0 0 * * *"   # daily midnight UTC
+
 concurrency:
   group: ${{ github.event_name != 'merge_group' && format('{0}-{1}', github.workflow, github.head_ref) || github.run_id }}
   cancel-in-progress: true

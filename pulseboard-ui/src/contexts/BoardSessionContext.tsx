@@ -1,14 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
-import type { ContractAddress } from '@midnight-ntwrk/midnight-js-protocol/compact-runtime';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { BBoardDerivedState, DeployedBBoardAPI } from '../../../api/src/index';
 import { State } from '../../../contract/src/index';
 import { useDeployedBoardContext } from '../hooks';
@@ -99,7 +89,7 @@ export function BoardSessionProvider({ children }: { children: ReactNode }) {
         return;
       }
       pushActivity('join', 'Joining board…', trimmed);
-      attachDeployment(provider.resolve(trimmed as ContractAddress));
+      attachDeployment(provider.resolve(trimmed));
     },
     [attachDeployment, provider],
   );
@@ -194,9 +184,7 @@ export function BoardSessionProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return (
-    <BoardSessionContext.Provider value={value}>{children}</BoardSessionContext.Provider>
-  );
+  return <BoardSessionContext.Provider value={value}>{children}</BoardSessionContext.Provider>;
 }
 
 export function useBoardSession() {

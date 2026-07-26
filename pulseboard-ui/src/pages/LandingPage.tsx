@@ -19,8 +19,8 @@ import { useBoardSession } from '../contexts/BoardSessionContext';
 import { networkLabel } from '../config';
 
 export function LandingPage() {
-  const { config, boardState, status } = useBoardSession();
-  const occupied = boardState?.state === 1;
+  const { config, boardState, status, isOccupied } = useBoardSession();
+  const occupied = isOccupied;
 
   return (
     <div className="min-h-screen w-full bg-[var(--canvas)] text-[var(--ink)]">
@@ -35,10 +35,7 @@ export function LandingPage() {
         <header className="relative z-10 flex w-full items-center justify-between px-5 py-5 sm:px-8 lg:px-12 xl:px-16">
           <p className="font-display text-xl tracking-tight sm:text-2xl">PulseBoard</p>
           <div className="flex items-center gap-3">
-            <Link
-              to="/board"
-              className="hidden text-sm font-semibold text-white/70 hover:text-white sm:inline"
-            >
+            <Link to="/board" className="hidden text-sm font-semibold text-white/70 hover:text-white sm:inline">
               Board
             </Link>
             <Link
@@ -53,12 +50,9 @@ export function LandingPage() {
         <div className="relative z-10 mx-auto flex w-full flex-1 flex-col justify-center px-5 py-16 sm:px-8 lg:px-12 xl:px-16">
           <div className="grid w-full items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-20">
             <div className="slide-up">
-              <p className="font-display text-[clamp(3.5rem,10vw,7rem)] leading-[0.88] tracking-tight">
-                PulseBoard
-              </p>
+              <p className="font-display text-[clamp(3.5rem,10vw,7rem)] leading-[0.88] tracking-tight">PulseBoard</p>
               <h1 className="mt-7 max-w-xl text-lg font-medium leading-snug text-white/80 sm:text-xl lg:text-2xl">
-                Post a community signal without revealing who you are — ownership stays a private
-                proof.
+                Post a community signal without revealing who you are — ownership stays a private proof.
               </h1>
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
@@ -157,9 +151,7 @@ export function LandingPage() {
             >
               <item.icon className="h-5 w-5 text-[var(--accent)]" strokeWidth={1.75} />
               <h2 className="mt-5 font-display text-2xl lg:text-3xl">{item.title}</h2>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--ink-muted)] lg:text-base">
-                {item.body}
-              </p>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--ink-muted)] lg:text-base">{item.body}</p>
             </div>
           ))}
         </div>
@@ -168,12 +160,8 @@ export function LandingPage() {
       {/* ── How it works ── */}
       <section className="w-full border-b border-[var(--line)] px-5 py-20 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-deep)]">
-            Flow
-          </p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">
-            From secret to public pulse
-          </h2>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-deep)]">Flow</p>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">From secret to public pulse</h2>
           <p className="mt-4 text-base leading-relaxed text-[var(--ink-muted)]">
             One Compact board. One message slot. Zero identity leakage.
           </p>
@@ -201,9 +189,7 @@ export function LandingPage() {
             <div key={step.n} className="relative">
               <p className="font-display text-4xl text-[var(--accent)]">{step.n}</p>
               <h3 className="mt-4 font-display text-2xl">{step.title}</h3>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--ink-muted)]">
-                {step.body}
-              </p>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--ink-muted)]">{step.body}</p>
             </div>
           ))}
         </div>
@@ -215,15 +201,10 @@ export function LandingPage() {
         className="w-full border-b border-[var(--line)] bg-[var(--ink)] px-5 py-20 text-white sm:px-8 lg:px-12 xl:px-16"
       >
         <div className="max-w-2xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300/80">
-            Full stack
-          </p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">
-            Contract, API, CLI, and console
-          </h2>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal-300/80">Full stack</p>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">Contract, API, CLI, and console</h2>
           <p className="mt-4 text-base leading-relaxed text-white/65">
-            Built as a Midnight workspace — Compact circuits, shared API, Node CLI, and a Lace
-            browser app.
+            Built as a Midnight workspace — Compact circuits, shared API, Node CLI, and a Lace browser app.
           </p>
         </div>
 
@@ -277,15 +258,9 @@ export function LandingPage() {
               <h3 className="font-display text-2xl">Observers can learn</h3>
             </div>
             <ul className="mt-6 space-y-4 text-sm leading-relaxed text-[var(--ink-muted)]">
-              <li className="border-l-2 border-[var(--accent)] pl-4">
-                Whether the board is vacant or occupied
-              </li>
-              <li className="border-l-2 border-[var(--accent)] pl-4">
-                The current public message text
-              </li>
-              <li className="border-l-2 border-[var(--accent)] pl-4">
-                The sequence counter after each rotation
-              </li>
+              <li className="border-l-2 border-[var(--accent)] pl-4">Whether the board is vacant or occupied</li>
+              <li className="border-l-2 border-[var(--accent)] pl-4">The current public message text</li>
+              <li className="border-l-2 border-[var(--accent)] pl-4">The sequence counter after each rotation</li>
               <li className="border-l-2 border-[var(--accent)] pl-4">
                 That a valid ZK proof was accepted for post / takeDown
               </li>
@@ -297,9 +272,7 @@ export function LandingPage() {
               <h3 className="font-display text-2xl">Observers cannot learn</h3>
             </div>
             <ul className="mt-6 space-y-4 text-sm leading-relaxed text-[var(--ink-muted)]">
-              <li className="border-l-2 border-[var(--line)] pl-4">
-                The author’s local secret key (circuit witness)
-              </li>
+              <li className="border-l-2 border-[var(--line)] pl-4">The author’s local secret key (circuit witness)</li>
               <li className="border-l-2 border-[var(--line)] pl-4">
                 Which Lace wallet controls the board as a public identity
               </li>
@@ -317,12 +290,8 @@ export function LandingPage() {
       {/* ── Workspace ── */}
       <section className="w-full px-5 py-20 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-deep)]">
-            Console
-          </p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">
-            One product. Four focused surfaces.
-          </h2>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-deep)]">Console</p>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl">One product. Four focused surfaces.</h2>
           <p className="mt-4 text-base leading-relaxed text-[var(--ink-muted)]">
             Dashboard, board, history, and settings — each with one job.
           </p>
@@ -361,12 +330,8 @@ export function LandingPage() {
               className="group flex flex-col bg-[var(--paper)] p-7 transition-colors hover:bg-[var(--accent-soft)] sm:p-8"
             >
               <item.icon className="h-5 w-5 text-[var(--accent)]" strokeWidth={1.75} />
-              <h3 className="mt-5 font-display text-xl group-hover:text-[var(--accent-deep)]">
-                {item.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--ink-muted)]">
-                {item.body}
-              </p>
+              <h3 className="mt-5 font-display text-xl group-hover:text-[var(--accent-deep)]">{item.title}</h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--ink-muted)]">{item.body}</p>
               <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--accent-deep)]">
                 Open <ArrowRight className="h-3.5 w-3.5" />
               </span>
@@ -406,8 +371,7 @@ export function LandingPage() {
           <div>
             <p className="font-display text-xl">PulseBoard</p>
             <p className="mt-2 max-w-md text-sm text-[var(--ink-muted)]">
-              Anonymous community polling on Midnight — Compact ZK, Lace wallet, full-stack
-              workspace.
+              Anonymous community polling on Midnight — Compact ZK, Lace wallet, full-stack workspace.
             </p>
           </div>
           <div className="flex flex-wrap gap-5 text-sm font-semibold text-[var(--accent-deep)]">

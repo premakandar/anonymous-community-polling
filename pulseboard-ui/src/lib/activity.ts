@@ -1,10 +1,4 @@
-export type ActivityKind =
-  | 'deploy'
-  | 'join'
-  | 'post'
-  | 'take_down'
-  | 'settings'
-  | 'error';
+export type ActivityKind = 'deploy' | 'join' | 'post' | 'take_down' | 'settings' | 'error';
 
 export type ActivityItem = {
   id: string;

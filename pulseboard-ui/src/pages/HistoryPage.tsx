@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PageHeader, Surface, Badge } from '../components/ui/surface';
 import { Button } from '../components/ui/button';
-import {
-  clearActivity,
-  loadActivity,
-  type ActivityItem,
-} from '../lib/activity';
+import { clearActivity, loadActivity, type ActivityItem } from '../lib/activity';
 
 function toneFor(kind: ActivityItem['kind']) {
   switch (kind) {
@@ -66,14 +62,10 @@ export function HistoryPage() {
                   <p className="font-semibold">{item.title}</p>
                 </div>
                 {item.detail ? (
-                  <p className="mt-1 break-all font-mono text-xs text-[var(--ink-muted)]">
-                    {item.detail}
-                  </p>
+                  <p className="mt-1 break-all font-mono text-xs text-[var(--ink-muted)]">{item.detail}</p>
                 ) : null}
               </div>
-              <time className="text-xs text-[var(--ink-faint)]">
-                {new Date(item.at).toLocaleString()}
-              </time>
+              <time className="text-xs text-[var(--ink-faint)]">{new Date(item.at).toLocaleString()}</time>
             </Surface>
           ))}
         </div>

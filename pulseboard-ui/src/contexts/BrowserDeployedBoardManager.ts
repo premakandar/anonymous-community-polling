@@ -51,7 +51,6 @@ import {
 } from '@midnight-ntwrk/midnight-js-protocol/ledger';
 import { type BBoardPrivateState } from '../../../contract/src/witnesses';
 import { inMemoryPrivateStateProvider } from '../in-memory-private-state-provider';
-import { NetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
 
 /**
@@ -218,7 +217,7 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
 
 /** @internal */
 const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
-  const networkId = import.meta.env.VITE_NETWORK_ID as NetworkId;
+  const networkId = import.meta.env.VITE_NETWORK_ID;
   const connectedAPI = await connectToWallet(logger, networkId);
   const zkConfigPath = window.location.origin;
   const keyMaterialProvider = new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window));
@@ -235,11 +234,9 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
     };
   }
 
-  const indexerUri = (import.meta.env.VITE_INDEXER_URI as string | undefined)?.trim() || config.indexerUri;
-  const indexerWsUri =
-    (import.meta.env.VITE_INDEXER_WS_URI as string | undefined)?.trim() || config.indexerWsUri;
-  const proverUri =
-    (import.meta.env.VITE_PROOF_SERVER_URL as string | undefined)?.trim() || config.proverServerUri;
+  const indexerUri = import.meta.env.VITE_INDEXER_URI?.trim() || config.indexerUri;
+  const indexerWsUri = import.meta.env.VITE_INDEXER_WS_URI?.trim() || config.indexerWsUri;
+  const proverUri = import.meta.env.VITE_PROOF_SERVER_URL?.trim() || config.proverServerUri;
 
   if (!indexerUri || !indexerWsUri || !proverUri) {
     throw new Error(
