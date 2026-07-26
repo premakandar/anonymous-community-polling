@@ -33,6 +33,14 @@ Env template: `pulseboard-ui/.env.example` (indexer / proof-server / contract ad
 | `VITE_PROOF_SERVER_URL` | Proof server (e.g. `http://127.0.0.1:6300`) |
 | `VITE_LOGGING_LEVEL` | `info` / `trace` |
 
+### Vercel
+
+Repo root `vercel.json` builds the UI workspace (`pulseboard-ui/dist`). In the Vercel project:
+
+**Settings → Build and Deployment → Root Directory** must be **empty** (repository root), not `bboard-ui` (that folder was renamed to `pulseboard-ui`).
+
+Then Redeploy. Optional env: same `VITE_*` keys as above.
+
 ---
 
 ## Project Structure
