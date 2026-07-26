@@ -17,5 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "eslint.config.mjs"]
+  "include": ["src"],
+  "exclude": ["src/_legacy", "eslint.config.mjs"]
 }

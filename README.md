@@ -1,17 +1,30 @@
-# Bulletin Board DApp
+# PulseBoard — Anonymous Community Polling
 
-This project is built on the [Midnight Network](https://midnight.network/).
+Midnight dApp for **anonymous community posts** (Level 3 category: **Anonymous Feedback / Survey**).
 
-[![Generic badge](https://img.shields.io/badge/Compact%20Compiler-0.30.0-1abc9c.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/TypeScript-5.9.3-blue.svg)](https://shields.io/)
+Users post a single public community message at a time. Ownership is proven with a private secret key witness — observers see the message, vacant/occupied status, and sequence, not who authored it. Only the owner can take the message down.
 
+## Product UI (Level 2)
 
-> **Use this repo as a template. Do not fork it.**
->  
-> This repository is intended to be used via GitHub’s “Use this template” flow.  
-> Forking this repo is discouraged, as forks are not tracked as independent projects.
+**PulseBoard** SaaS console in `bboard-ui/`:
 
-A Midnight smart contract example demonstrating a simple one-item bulletin board with zero-knowledge proofs on testnet. Users can post a single message at a time, and only the message author can remove it.
+| Route | Job |
+| --- | --- |
+| `/` | Landing |
+| `/dashboard` | Overview metrics |
+| `/board` | Deploy / join / post / take-down |
+| `/history` | Local activity |
+| `/settings` | Contract + env |
+
+```bash
+npm install
+npm run compile
+npm run dev   # http://localhost:5173 — unlock Lace first
+```
+
+Env template: `bboard-ui/.env.example` (indexer / proof-server / contract address).
+
+---
 
 ## Project Structure
 

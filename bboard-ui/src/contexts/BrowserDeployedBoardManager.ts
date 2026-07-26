@@ -49,7 +49,7 @@ import {
   Transaction,
   TransactionId,
 } from '@midnight-ntwrk/midnight-js-protocol/ledger';
-import { BBoardPrivateState } from '@midnight-ntwrk/bboard-contract';
+import { type BBoardPrivateState } from '../../../contract/src/witnesses';
 import { inMemoryPrivateStateProvider } from '../in-memory-private-state-provider';
 import { NetworkId } from '@midnight-ntwrk/midnight-js-network-id';
 import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
@@ -220,16 +220,40 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
 const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
   const networkId = import.meta.env.VITE_NETWORK_ID as NetworkId;
   const connectedAPI = await connectToWallet(logger, networkId);
-  const zkConfigPath = window.location.origin; // '../../../contract/src/managed/bboard';
+  const zkConfigPath = window.location.origin;
   const keyMaterialProvider = new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window));
-  const config = await connectedAPI.getConfiguration();
+
+  let config: { indexerUri: string; indexerWsUri: string; proverServerUri?: string };
+  try {
+    config = await connectedAPI.getConfiguration();
+  } catch (e) {
+    logger.warn({ error: e }, 'Lace getConfiguration failed — using env URI overrides if set');
+    config = {
+      indexerUri: '',
+      indexerWsUri: '',
+      proverServerUri: undefined,
+    };
+  }
+
+  const indexerUri = (import.meta.env.VITE_INDEXER_URI as string | undefined)?.trim() || config.indexerUri;
+  const indexerWsUri =
+    (import.meta.env.VITE_INDEXER_WS_URI as string | undefined)?.trim() || config.indexerWsUri;
+  const proverUri =
+    (import.meta.env.VITE_PROOF_SERVER_URL as string | undefined)?.trim() || config.proverServerUri;
+
+  if (!indexerUri || !indexerWsUri || !proverUri) {
+    throw new Error(
+      'Missing indexer/prover URIs. Unlock Lace or set VITE_INDEXER_URI, VITE_INDEXER_WS_URI, and VITE_PROOF_SERVER_URL.',
+    );
+  }
+
   const inMemoryBBoardPrivateStateProvider = inMemoryPrivateStateProvider<string, BBoardPrivateState>();
   const shieldedAddresses = await connectedAPI.getShieldedAddresses();
   return {
     privateStateProvider: inMemoryBBoardPrivateStateProvider,
     zkConfigProvider: keyMaterialProvider,
-    proofProvider: httpClientProofProvider(config.proverServerUri!, keyMaterialProvider),
-    publicDataProvider: indexerPublicDataProvider(config.indexerUri, config.indexerWsUri),
+    proofProvider: httpClientProofProvider(proverUri, keyMaterialProvider),
+    publicDataProvider: indexerPublicDataProvider(indexerUri, indexerWsUri),
     walletProvider: {
       getCoinPublicKey(): string {
         return shieldedAddresses.shieldedCoinPublicKey;

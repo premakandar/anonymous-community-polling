@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --canvas: #eef2f4;
+  --paper: #ffffff;
+  --surface: #e2e8ed;
+  --ink: #0f1c24;
+  --ink-soft: #1e333f;
+  --ink-muted: #4a6573;
+  --ink-faint: #8aa0ac;
+  --line: #c9d5dc;
+  --accent: #0d9488;
+  --accent-deep: #0f766e;
+  --accent-soft: #ccfbf1;
+  --ok: #047857;
+  --ok-soft: #d1fae5;
+  --warn: #b45309;
+  --warn-soft: #ffedd5;
+  --danger: #be123c;
+  --danger-soft: #ffe4e6;
+  --radius: 0.5rem;
+  --font-display: 'Outfit', 'Segoe UI', sans-serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --shell-w: 16rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.hero-wash {
+  background:
+    radial-gradient(ellipse 80% 70% at 90% 10%, rgba(13, 148, 136, 0.35), transparent 55%),
+    radial-gradient(ellipse 45% 50% at 5% 85%, rgba(255, 255, 255, 0.06), transparent 50%),
+    linear-gradient(155deg, #061016 0%, #0c2228 45%, #134e4a 100%);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, black 35%, transparent 100%);
+}
+
+.slide-up {
+  animation: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fade-in {
+  animation: fade-in 0.9s ease both;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-up,
+  .fade-in {
+    animation: none;
+  }
+}
