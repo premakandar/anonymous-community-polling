@@ -62,3 +62,6 @@ jobs:
         working-directory: pulseboard-ui
         run: |
           npm run ci
+
+      - name: Run root workspace tests
+        run: npm test
