@@ -9,18 +9,32 @@ Anyone can publish a single public pulse; ownership is proven with a local secre
 witness. Observers see the message, vacant/occupied status, and sequence — never who
 wrote it. Only the matching private owner can take it down.
 
+[![CI](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml/badge.svg)](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://anonymous-community-polling.vercel.app/)
+[![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/UpCOUF-9nWQ)
 [![license](https://img.shields.io/badge/license-MIT-111111)](./package.json)
 [![Midnight](https://img.shields.io/badge/Midnight-ZK-1c7a4c)](https://midnight.network)
-[![Level 3](https://img.shields.io/badge/Rise--In-Anonymous%20Feedback%20%2F%20Survey-0f766e)](./docs/PRODUCT_PROPOSAL.md)
+[![Level 3](https://img.shields.io/badge/Rise--In-Anonymous%20Feedback%20%2F%20Survey-0f766e)](PROPOSAL.md)
 
-[Demo video](https://youtu.be/UpCOUF-9nWQ) &nbsp;/&nbsp; [Privacy model](#what-the-chain-sees-and-what-it-never-sees) &nbsp;/&nbsp; [Run locally](#run-it-locally) &nbsp;/&nbsp; [Docs](#documentation)
+[Live demo](https://anonymous-community-polling.vercel.app/) &nbsp;/&nbsp; [Demo video](https://youtu.be/UpCOUF-9nWQ) &nbsp;/&nbsp; [Privacy model](#what-the-chain-sees-and-what-it-never-sees) &nbsp;/&nbsp; [Proposal](PROPOSAL.md) &nbsp;/&nbsp; [Run locally](#run-it-locally)
 
 </div>
 
 ---
 
 > **Level 3 category: Anonymous Feedback / Survey.**  
-> Full-stack local path (undeployed + Lace) is the supported demo path. Preprod deploy may block on wallet sync — see [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md).
+> Full-stack local path (undeployed + Lace) is the supported demo path. Published local Preprod contract address: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`. Preprod deploy notes — see [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md).
+
+## Links
+
+| Resource | URL |
+| --- | --- |
+| **Live demo** | [https://anonymous-community-polling.vercel.app/](https://anonymous-community-polling.vercel.app/) |
+| **Demo video** | [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ) |
+| **GitHub** | [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling) |
+| **CI/CD** | [`.github/workflows/ci.yaml`](.github/workflows/ci.yaml) |
+| **Proposal** | [PROPOSAL.md](PROPOSAL.md) |
+| **Preprod address (local)** | `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6` |
 
 ## The idea in one line
 
