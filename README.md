@@ -10,13 +10,13 @@ witness. Observers see the message, vacant/occupied status, and sequence — nev
 wrote it. Only the matching private owner can take it down.
 
 [![CI](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml/badge.svg)](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://anonymous-community-polling.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://pulseboard-ruby.vercel.app/)
 [![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/UpCOUF-9nWQ)
 [![license](https://img.shields.io/badge/license-MIT-111111)](./package.json)
 [![Midnight](https://img.shields.io/badge/Midnight-ZK-1c7a4c)](https://midnight.network)
 [![Level 3](https://img.shields.io/badge/Rise--In-Anonymous%20Feedback%20%2F%20Survey-0f766e)](PROPOSAL.md)
 
-[Live demo](https://anonymous-community-polling.vercel.app/) &nbsp;/&nbsp; [Demo video](https://youtu.be/UpCOUF-9nWQ) &nbsp;/&nbsp; [Privacy model](#what-the-chain-sees-and-what-it-never-sees) &nbsp;/&nbsp; [Proposal](PROPOSAL.md) &nbsp;/&nbsp; [Run locally](#run-it-locally)
+[Live demo](https://pulseboard-ruby.vercel.app/) &nbsp;/&nbsp; [Demo video](https://youtu.be/UpCOUF-9nWQ) &nbsp;/&nbsp; [Privacy model](#what-the-chain-sees-and-what-it-never-sees) &nbsp;/&nbsp; [Proposal](PROPOSAL.md) &nbsp;/&nbsp; [Run locally](#run-it-locally)
 
 </div>
 
@@ -29,7 +29,7 @@ wrote it. Only the matching private owner can take it down.
 
 | Resource | URL |
 | --- | --- |
-| **Live demo** | [https://anonymous-community-polling.vercel.app/](https://anonymous-community-polling.vercel.app/) |
+| **Live demo** | [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/) |
 | **Demo video** | [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ) |
 | **GitHub** | [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling) |
 | **CI/CD** | [`.github/workflows/ci.yaml`](.github/workflows/ci.yaml) |

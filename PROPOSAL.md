@@ -3,7 +3,7 @@
 > **Zero-Knowledge Anonymous Bulletin Board and Community Signals on the Midnight Network**
 
 [![CI](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml/badge.svg)](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://anonymous-community-polling.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://pulseboard-ruby.vercel.app/)
 [![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/UpCOUF-9nWQ)
 [![Compact](https://img.shields.io/badge/Compact-0.31.1-06b6d4?style=flat-square)](https://docs.midnight.network)
 
@@ -79,7 +79,7 @@ export circuit takeDown(): Opaque<"string"> {
 
 - **Network**: Midnight Preprod Testnet
 - **Local Preprod Address**: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
-- **Live Frontend**: [anonymous-community-polling.vercel.app](https://anonymous-community-polling.vercel.app/)
+- **Live Frontend**: [pulseboard-ruby.vercel.app](https://pulseboard-ruby.vercel.app/)
 - **Demo Video**: [YouTube](https://youtu.be/UpCOUF-9nWQ)
 
 ---
