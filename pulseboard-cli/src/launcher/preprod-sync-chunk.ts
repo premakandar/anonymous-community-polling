@@ -56,16 +56,12 @@ async function main() {
   let readyStreak = 0;
   const sample = async () => {
     try {
-      const s = await Rx.firstValueFrom(
-        walletCtx.wallet.state().pipe(Rx.take(1), Rx.timeout({ first: 8_000 })),
-      );
+      const s = await Rx.firstValueFrom(walletCtx.wallet.state().pipe(Rx.take(1), Rx.timeout({ first: 8_000 })));
       const elapsed = ((Date.now() - start) / 60_000).toFixed(1);
       const sh = progressDone(s.shielded.state.progress);
       const uns = progressDone(s.unshielded.progress);
       const dust = progressDone(s.dust.state.progress);
-      console.log(
-        `  [${elapsed}m] isSynced=${s.isSynced} shielded=${sh} unshielded=${uns} dust=${dust}`,
-      );
+      console.log(`  [${elapsed}m] isSynced=${s.isSynced} shielded=${sh} unshielded=${uns} dust=${dust}`);
       if (sh && uns) {
         readyStreak += 1;
       } else {

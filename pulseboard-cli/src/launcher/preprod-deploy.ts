@@ -18,6 +18,8 @@ import { indexerPublicDataProvider } from '@midnight-ntwrk/midnight-js-indexer-p
 import { httpClientProofProvider } from '@midnight-ntwrk/midnight-js-http-client-proof-provider';
 import { levelPrivateStateProvider } from '@midnight-ntwrk/midnight-js-level-private-state-provider';
 import { toHex } from '@midnight-ntwrk/midnight-js-utils';
+import type { UnboundTransaction } from '@midnight-ntwrk/midnight-js-types';
+import type { FinalizedTransaction } from '@midnight-ntwrk/midnight-js-protocol/ledger';
 import {
   createPreprodWallet,
   persistPreprodWalletState,
@@ -63,7 +65,7 @@ function createProviders(walletCtx: WalletContext): BBoardProviders {
   const walletProvider = {
     getCoinPublicKey: () => walletCtx.shieldedSecretKeys.coinPublicKey,
     getEncryptionPublicKey: () => walletCtx.shieldedSecretKeys.encryptionPublicKey,
-    async balanceTx(tx: any, ttl?: Date) {
+    async balanceTx(tx: UnboundTransaction, ttl?: Date) {
       const recipe = await walletCtx.wallet.balanceUnboundTransaction(
         tx,
         { shieldedSecretKeys: walletCtx.shieldedSecretKeys, dustSecretKey: walletCtx.dustSecretKey },
@@ -71,7 +73,7 @@ function createProviders(walletCtx: WalletContext): BBoardProviders {
       );
       return walletCtx.wallet.finalizeRecipe(recipe);
     },
-    submitTx: (tx: any) => walletCtx.wallet.submitTransaction(tx) as any,
+    submitTx: (tx: FinalizedTransaction) => walletCtx.wallet.submitTransaction(tx),
   };
 
   const zkConfigProvider = new NodeZkConfigProvider<'post' | 'takeDown'>(zkConfigPath);
@@ -87,8 +89,8 @@ function createProviders(walletCtx: WalletContext): BBoardProviders {
     publicDataProvider: indexerPublicDataProvider(PREPROD_NETWORK.indexer, PREPROD_NETWORK.indexerWS),
     zkConfigProvider,
     proofProvider: httpClientProofProvider(PREPROD_NETWORK.proofServer, zkConfigProvider),
-    walletProvider: walletProvider as BBoardProviders['walletProvider'],
-    midnightProvider: walletProvider as BBoardProviders['midnightProvider'],
+    walletProvider: walletProvider,
+    midnightProvider: walletProvider,
   };
 }
 
@@ -110,10 +112,7 @@ async function waitForDustSynced(walletCtx: WalletContext, timeoutMs = 45 * 60 *
         first: timeoutMs,
         with: () =>
           Rx.throwError(
-            () =>
-              new Error(
-                `Dust wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} min`,
-              ),
+            () => new Error(`Dust wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} min`),
           ),
       }),
     ),
@@ -135,9 +134,7 @@ async function ensureDust(walletCtx: WalletContext): Promise<void> {
   }
 
   let state = await Rx.firstValueFrom(walletCtx.wallet.state().pipe(Rx.take(1)));
-  const unregisteredUtxos = state.unshielded.availableCoins.filter(
-    (c) => !c.meta?.registeredForDustGeneration,
-  );
+  const unregisteredUtxos = state.unshielded.availableCoins.filter((c) => !c.meta?.registeredForDustGeneration);
 
   if (unregisteredUtxos.length > 0) {
     console.log(`  Registering ${unregisteredUtxos.length} NIGHT UTXOs for DUST generation...`);
@@ -303,11 +300,7 @@ async function main() {
       explorer: `https://preprod.midnightexplorer.com/contracts/0x${address}`,
     };
     writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
-    writeFileSync(
-      walletNotePath,
-      `SEED=${seed}\nCONTRACT=${address}\nFAUCET=${PREPROD_NETWORK.faucet}\n`,
-      'utf8',
-    );
+    writeFileSync(walletNotePath, `SEED=${seed}\nCONTRACT=${address}\nFAUCET=${PREPROD_NETWORK.faucet}\n`, 'utf8');
     console.log('\n=== PREPROD DEPLOY OK ===');
     console.log(JSON.stringify(payload, null, 2));
   } catch (e) {

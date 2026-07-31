@@ -29,10 +29,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.resolve(__dirname, '..', '..', '..', 'preview-deployment.json');
 
 // Preview faucet /health often exceeds testkit's 1s axios timeout on Windows.
+// eslint-disable-next-line @typescript-eslint/unbound-method -- stash prototype method for restore
 const originalFaucetHealth = FaucetClient.prototype.health;
-FaucetClient.prototype.health = async function health() {
+FaucetClient.prototype.health = function health(this: void): Promise<never> {
   console.log('Skipping faucet /health (requestTokens still used for funding)');
-  return undefined as never;
+  return Promise.resolve(undefined as never);
 };
 
 async function waitForProofServer(url: string, timeoutMs = 180_000) {
@@ -59,7 +60,7 @@ async function main() {
   try {
     await waitForProofServer('http://localhost:6300');
     logger.info('Using local proof server on :6300');
-    const envConfiguration = await testEnv.start(new StaticProofServerContainer(6300) as never);
+    const envConfiguration = await testEnv.start(new StaticProofServerContainer(6300));
     logger.info(`Environment: ${JSON.stringify(envConfiguration)}`);
 
     const seed = process.env.PREVIEW_SEED?.trim() || toHex(randomBytes(32));

@@ -64,11 +64,7 @@ export function loadWalletState(network: string, opts: FsOptions = {}): Persiste
   };
 }
 
-export function saveWalletState(
-  network: string,
-  state: PersistedWalletState,
-  opts: FsOptions = {},
-): void {
+export function saveWalletState(network: string, state: PersistedWalletState, opts: FsOptions = {}): void {
   if (state.shielded !== undefined) writeVersionedState(statePath(network, 'shielded', opts), state.shielded);
   if (state.unshielded !== undefined) writeVersionedState(statePath(network, 'unshielded', opts), state.unshielded);
   if (state.dust !== undefined) writeVersionedState(statePath(network, 'dust', opts), state.dust);

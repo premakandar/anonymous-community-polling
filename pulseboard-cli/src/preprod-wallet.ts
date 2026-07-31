@@ -28,12 +28,7 @@ import {
 } from './preprod-wallet-state.js';
 
 export { unshieldedToken };
-export {
-  saveWalletState,
-  loadWalletState,
-  clearDustWalletState,
-  WALLET_STATE_DIR,
-} from './preprod-wallet-state.js';
+export { saveWalletState, loadWalletState, clearDustWalletState, WALLET_STATE_DIR } from './preprod-wallet-state.js';
 
 export const PREPROD_NETWORK = {
   networkId: 'preprod' as const,
@@ -93,8 +88,7 @@ export async function createPreprodWallet(opts: {
     clearDustWalletState('preprod', { cwd: opts.cwd });
   }
 
-  const saved: PersistedWalletState =
-    opts.restore === false ? {} : loadWalletState('preprod', { cwd: opts.cwd });
+  const saved: PersistedWalletState = opts.restore === false ? {} : loadWalletState('preprod', { cwd: opts.cwd });
   if (skipDust) {
     delete saved.dust;
   }
@@ -113,15 +107,22 @@ export async function createPreprodWallet(opts: {
     costParameters: { additionalFeeOverhead: PUBLIC_FEE_OVERHEAD, feeBlocksMargin: 5 },
   };
 
+  type RestorableWallet = { restore: (serialized: string) => Promise<unknown> };
+  const asRestorable = (cls: unknown): RestorableWallet => cls as RestorableWallet;
+  const restoreState = (value: unknown): string => {
+    if (typeof value === 'string') return value;
+    return JSON.stringify(value);
+  };
+
   const wallet = await WalletFacade.init({
     configuration: walletConfig,
     shielded: async (config) => {
       const cls = ShieldedWallet(config);
-      if (saved.shielded !== undefined) {
+      if (saved.shielded !== undefined && saved.shielded !== null) {
         try {
-          const restoredWallet = await (cls as any).restore(saved.shielded);
+          const restoredWallet = await asRestorable(cls).restore(restoreState(saved.shielded));
           restored.shielded = true;
-          return restoredWallet;
+          return restoredWallet as Awaited<ReturnType<typeof cls.startWithSecretKeys>>;
         } catch (err) {
           warnRestoreFailure('shielded', err);
         }
@@ -130,11 +131,11 @@ export async function createPreprodWallet(opts: {
     },
     unshielded: async (config) => {
       const cls = UnshieldedWallet(config);
-      if (saved.unshielded !== undefined) {
+      if (saved.unshielded !== undefined && saved.unshielded !== null) {
         try {
-          const restoredWallet = await (cls as any).restore(saved.unshielded);
+          const restoredWallet = await asRestorable(cls).restore(restoreState(saved.unshielded));
           restored.unshielded = true;
-          return restoredWallet;
+          return restoredWallet as Awaited<ReturnType<typeof cls.startWithPublicKey>>;
         } catch (err) {
           warnRestoreFailure('unshielded', err);
         }
@@ -143,11 +144,11 @@ export async function createPreprodWallet(opts: {
     },
     dust: async (config) => {
       const cls = DustWallet(config);
-      if (saved.dust !== undefined) {
+      if (saved.dust !== undefined && saved.dust !== null) {
         try {
-          const restoredWallet = await (cls as any).restore(saved.dust);
+          const restoredWallet = await asRestorable(cls).restore(restoreState(saved.dust));
           restored.dust = true;
-          return restoredWallet;
+          return restoredWallet as Awaited<ReturnType<typeof cls.startWithSecretKey>>;
         } catch (err) {
           warnRestoreFailure('dust', err);
         }
@@ -171,9 +172,7 @@ export async function persistPreprodWalletState(
   for (const kind of CHILD_KINDS) {
     if (kind === 'dust' && !includeDust) continue;
     try {
-      const child = (ctx.wallet as unknown as Record<ChildKind, { serializeState: () => Promise<unknown> }>)[
-        kind
-      ];
+      const child = (ctx.wallet as unknown as Record<ChildKind, { serializeState: () => Promise<unknown> }>)[kind];
       const serialized = await child.serializeState();
       if (kind === 'dust') {
         next.dust = serialized as string;
@@ -205,19 +204,13 @@ export async function waitForCoreWalletsSynced(
         const dust = s.dust.state.progress.isStrictlyComplete();
         console.log(`  [${mins}m] core sync: shielded=${sh} unshielded=${uns} dust=${dust}`);
       }),
-      Rx.filter(
-        (s) =>
-          s.shielded.state.progress.isStrictlyComplete() && s.unshielded.progress.isStrictlyComplete(),
-      ),
+      Rx.filter((s) => s.shielded.state.progress.isStrictlyComplete() && s.unshielded.progress.isStrictlyComplete()),
       Rx.take(1),
       Rx.timeout({
         first: timeoutMs,
         with: () =>
           Rx.throwError(
-            () =>
-              new Error(
-                `Shielded+unshielded sync did not complete within ${Math.round(timeoutMs / 60_000)} min`,
-              ),
+            () => new Error(`Shielded+unshielded sync did not complete within ${Math.round(timeoutMs / 60_000)} min`),
           ),
       }),
     ),
@@ -248,11 +241,7 @@ export async function waitForWalletSync(
       ctx.wallet.waitForSyncedState(),
       new Promise<never>((_, reject) => {
         timeoutHandle = setTimeout(() => {
-          reject(
-            new Error(
-              `Preprod wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} minutes.`,
-            ),
-          );
+          reject(new Error(`Preprod wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} minutes.`));
         }, timeoutMs);
       }),
     ]);

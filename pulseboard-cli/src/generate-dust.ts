@@ -41,9 +41,7 @@ export const getUnshieldedSeed = (seed: string): Uint8Array<ArrayBufferLike> => 
 function progressDone(progress: unknown): boolean {
   if (!progress || typeof progress !== 'object') return false;
   const candidate = progress as { isStrictlyComplete?: unknown };
-  return typeof candidate.isStrictlyComplete === 'function'
-    ? (candidate.isStrictlyComplete as () => boolean)()
-    : false;
+  return typeof candidate.isStrictlyComplete === 'function' ? (candidate.isStrictlyComplete as () => boolean)() : false;
 }
 
 function logSyncSample(logger: Logger, state: FacadeState, start: number): void {
@@ -76,9 +74,7 @@ async function waitForFacadeSynced(
 
   const sample = async () => {
     try {
-      const state = await Rx.firstValueFrom(
-        walletFacade.state().pipe(Rx.take(1), Rx.timeout({ first: 8_000 })),
-      );
+      const state = await Rx.firstValueFrom(walletFacade.state().pipe(Rx.take(1), Rx.timeout({ first: 8_000 })));
       logSyncSample(logger, state, start);
     } catch (err) {
       logger.warn(`Sync sample failed (ignored): ${String(err)}`);
@@ -96,11 +92,7 @@ async function waitForFacadeSynced(
       walletFacade.waitForSyncedState(),
       new Promise<never>((_, reject) => {
         timeoutHandle = setTimeout(() => {
-          reject(
-            new Error(
-              `Preprod wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} minutes.`,
-            ),
-          );
+          reject(new Error(`Preprod wallet sync did not complete within ${Math.round(timeoutMs / 60_000)} minutes.`));
         }, timeoutMs);
       }),
     ]);
@@ -167,7 +159,7 @@ export const generateDust = async (
       Rx.retry({
         delay: (err, retryCount) => {
           if (String(err).includes('Timed out')) {
-            return Rx.throwError(() => err);
+            return Rx.throwError(() => err as Error);
           }
           logger.warn(`dust balance wait error (retry ${retryCount}): ${String(err)}`);
           return Rx.timer(15_000);
