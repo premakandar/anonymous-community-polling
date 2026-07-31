@@ -246,6 +246,17 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
 
   const inMemoryBBoardPrivateStateProvider = inMemoryPrivateStateProvider<string, BBoardPrivateState>();
   const shieldedAddresses = await connectedAPI.getShieldedAddresses();
+
+  try {
+    const dust = await connectedAPI.getDustBalance();
+    logger.info({ dustBalance: dust.balance.toString(), dustCap: dust.cap.toString() }, 'Lace DUST balance');
+    if (dust.balance <= 0n) {
+      logger.warn('DUST is 0 — Lace cannot pay deploy fees until Generate tDUST completes');
+    }
+  } catch (e) {
+    logger.warn({ error: formatWalletError(e) }, 'Could not read Lace DUST balance');
+  }
+
   return {
     privateStateProvider: inMemoryBBoardPrivateStateProvider,
     zkConfigProvider: keyMaterialProvider,
@@ -261,8 +272,16 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
       balanceTx: async (tx: UnboundTransaction, ttl?: Date): Promise<FinalizedTransaction> => {
         try {
           logger.info({ tx, ttl }, 'Balancing transaction via wallet');
+
+          const dust = await connectedAPI.getDustBalance();
+          if (dust.balance <= 0n) {
+            throw new Error(
+              'Lace has 0 tDUST. Open Lace → Tokens → Generate tDUST (needs faucet tNight first), wait until DUST > 0, then Deploy again.',
+            );
+          }
+
           const serializedTx = toHex(tx.serialize());
-          const received = await connectedAPI.balanceUnsealedTransaction(serializedTx);
+          const received = await connectedAPI.balanceUnsealedTransaction(serializedTx, { payFees: true });
           return Transaction.deserialize<SignatureEnabled, Proof, Binding>(
             'signature',
             'proof',
@@ -270,8 +289,9 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
             fromHex(received.tx),
           );
         } catch (e) {
-          logger.error({ error: e }, 'Error balancing transaction via wallet');
-          throw e;
+          const message = formatWalletError(e);
+          logger.error({ error: message, raw: e }, 'Error balancing transaction via wallet');
+          throw e instanceof Error ? e : new Error(message);
         }
       },
     },
@@ -287,32 +307,56 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
   };
 };
 
-/** @internal */
-const getFirstCompatibleWallet = (): InitialAPI | undefined => {
-  if (!window.midnight) return undefined;
-  return Object.values(window.midnight).find(
-    (wallet): wallet is InitialAPI =>
-      !!wallet &&
-      typeof wallet === 'object' &&
-      'apiVersion' in wallet &&
-      semver.satisfies(wallet.apiVersion, COMPATIBLE_CONNECTOR_API_VERSION),
-  );
+/** Flatten Lace / APIError objects into a readable string for the UI. */
+const formatWalletError = (error: unknown): string => {
+  if (error instanceof Error && error.message) return error.message;
+  if (typeof error === 'string') return error;
+  if (error && typeof error === 'object') {
+    const record = error as Record<string, unknown>;
+    if (typeof record.message === 'string' && record.message) return record.message;
+    const cause = record.cause as Record<string, unknown> | undefined;
+    if (cause?.message && typeof cause.message === 'string') return cause.message;
+    try {
+      return JSON.stringify(error);
+    } catch {
+      /* ignore */
+    }
+  }
+  return String(error);
 };
 
 const COMPATIBLE_CONNECTOR_API_VERSION = '4.x';
 
+const isCompatibleWallet = (wallet: unknown): wallet is InitialAPI =>
+  !!wallet &&
+  typeof wallet === 'object' &&
+  'apiVersion' in wallet &&
+  semver.satisfies((wallet as InitialAPI).apiVersion, COMPATIBLE_CONNECTOR_API_VERSION);
+
+/** Prefer Lace (`mnLace`) so 1AM does not win when both extensions are installed. */
+const getPreferredCompatibleWallet = (): InitialAPI | undefined => {
+  if (!window.midnight) return undefined;
+  const lace = window.midnight.mnLace;
+  if (isCompatibleWallet(lace)) return lace;
+  return Object.values(window.midnight).find(isCompatibleWallet);
+};
+
 /** @internal */
 const connectToWallet = (logger: Logger, networkId: string): Promise<ConnectedAPI> => {
+  const requestedNetwork = (networkId || 'preprod').toLowerCase();
   return firstValueFrom(
     fnPipe(
       interval(100),
-      map(() => getFirstCompatibleWallet()),
+      map(() => getPreferredCompatibleWallet()),
       tap((connectorAPI) => {
         logger.info(connectorAPI, 'Check for wallet connector API');
       }),
       filter((connectorAPI): connectorAPI is InitialAPI => !!connectorAPI),
       tap((connectorAPI) => {
-        logger.info(connectorAPI, 'Compatible wallet connector API found. Connecting.');
+        logger.info(
+          { name: connectorAPI.name, apiVersion: connectorAPI.apiVersion, networkId: requestedNetwork },
+          'Compatible wallet connector API found. Connecting.',
+        );
       }),
       take(1),
       timeout({
@@ -325,25 +369,39 @@ const connectToWallet = (logger: Logger, networkId: string): Promise<ConnectedAP
           }),
       }),
       concatMap(async (initialAPI) => {
-        const connectedAPI = await initialAPI.connect(networkId);
+        // Lace shows a permission popup; do not race this with a short timeout.
+        logger.info('Waiting for Lace authorization popup — approve localhost:5173');
+        const connectedAPI = await initialAPI.connect(requestedNetwork);
         const connectionStatus = await connectedAPI.getConnectionStatus();
         logger.info(connectionStatus, 'Wallet connector API enabled status');
         return connectedAPI;
       }),
       timeout({
-        first: 5_000,
+        // User must click Approve in Lace; 5s was causing false "failed to respond".
+        first: 120_000,
         with: () =>
           throwError(() => {
             logger.error('Wallet connector API has failed to respond');
 
-            return new Error('Midnight Lace wallet has failed to respond. Extension enabled?');
+            return new Error(
+              'Lace did not approve in time. Click Deploy board, then Approve the Lace popup within 2 minutes.',
+            );
           }),
       }),
       catchError((error, apis) =>
         error
           ? throwError(() => {
               logger.error('Unable to enable connector API' + error);
-              return new Error('Application is not authorized');
+              const message = error instanceof Error ? error.message : String(error);
+              if (/network/i.test(message)) {
+                return new Error(
+                  `Network mismatch (app wants ${requestedNetwork}). Set Lace Midnight to Preprod, Confirm, disable 1AM, retry.`,
+                );
+              }
+              if (/approve|respond|time/i.test(message)) {
+                return new Error(message);
+              }
+              return new Error('Application is not authorized — approve the Lace connection popup for localhost:5173');
             })
           : apis,
       ),

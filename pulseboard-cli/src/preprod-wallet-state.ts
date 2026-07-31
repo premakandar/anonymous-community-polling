@@ -1,0 +1,83 @@
+// Wallet sync-state persistence for Preprod (create-mn-app / Degree Verification pattern).
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+export const WALLET_STATE_DIR = '.midnight-wallet-state';
+export const WALLET_STATE_VERSION = 1 as const;
+
+export type ChildKind = 'shielded' | 'unshielded' | 'dust';
+export const CHILD_KINDS: readonly ChildKind[] = ['shielded', 'unshielded', 'dust'] as const;
+
+export interface PersistedWalletState {
+  shielded?: unknown;
+  unshielded?: unknown;
+  dust?: string;
+}
+
+export interface FsOptions {
+  cwd?: string;
+}
+
+function networkDir(network: string, opts: FsOptions = {}): string {
+  return path.join(opts.cwd ?? process.cwd(), WALLET_STATE_DIR, network);
+}
+
+function statePath(network: string, kind: ChildKind, opts: FsOptions = {}): string {
+  return path.join(networkDir(network, opts), `${kind}.json`);
+}
+
+function atomicWrite(file: string, content: string): void {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.tmp-${process.pid}-${Date.now()}`;
+  fs.writeFileSync(tmp, content);
+  fs.renameSync(tmp, file);
+}
+
+interface VersionedState<T> {
+  version: typeof WALLET_STATE_VERSION;
+  state: T;
+}
+
+function readVersionedState<T>(file: string): T | undefined {
+  if (!fs.existsSync(file)) return undefined;
+  try {
+    const parsed = JSON.parse(fs.readFileSync(file, 'utf-8')) as VersionedState<T>;
+    if (!parsed || typeof parsed !== 'object' || parsed.version !== WALLET_STATE_VERSION) {
+      return undefined;
+    }
+    return parsed.state;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeVersionedState<T>(file: string, state: T): void {
+  const payload: VersionedState<T> = { version: WALLET_STATE_VERSION, state };
+  atomicWrite(file, `${JSON.stringify(payload)}\n`);
+}
+
+export function loadWalletState(network: string, opts: FsOptions = {}): PersistedWalletState {
+  return {
+    shielded: readVersionedState(statePath(network, 'shielded', opts)),
+    unshielded: readVersionedState(statePath(network, 'unshielded', opts)),
+    dust: readVersionedState<string>(statePath(network, 'dust', opts)),
+  };
+}
+
+export function saveWalletState(
+  network: string,
+  state: PersistedWalletState,
+  opts: FsOptions = {},
+): void {
+  if (state.shielded !== undefined) writeVersionedState(statePath(network, 'shielded', opts), state.shielded);
+  if (state.unshielded !== undefined) writeVersionedState(statePath(network, 'unshielded', opts), state.unshielded);
+  if (state.dust !== undefined) writeVersionedState(statePath(network, 'dust', opts), state.dust);
+}
+
+/** Remove stuck incomplete dust checkpoint so the next run starts dust from seed. */
+export function clearDustWalletState(network: string, opts: FsOptions = {}): void {
+  const file = statePath(network, 'dust', opts);
+  if (fs.existsSync(file)) {
+    fs.unlinkSync(file);
+  }
+}

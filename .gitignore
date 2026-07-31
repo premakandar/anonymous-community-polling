@@ -62,3 +62,14 @@ jspm_packages/
 
 .claude
 .midnight-expert
+preview-deployment.json
+*-deployment.json
+
+
+.preview-wallet.env
+
+
+preprod-deployment.json
+.preprod-wallet.env
+.midnight-wallet-state/
+

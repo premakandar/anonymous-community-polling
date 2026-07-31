@@ -12,6 +12,9 @@
     "prepack": "npm run build",
     "standalone": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/standalone.ts",
     "preview-remote": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/preview.ts",
+    "preview-deploy": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/preview-deploy.ts",
+    "preprod-deploy": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/preprod-deploy.ts",
+    "preprod-sync-chunk": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/preprod-sync-chunk.ts",
     "preprod-remote": "node --experimental-specifier-resolution=node --loader ts-node/esm src/launcher/preprod.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },

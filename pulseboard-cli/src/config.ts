@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   EnvironmentConfiguration,
   getTestEnvironment,
@@ -31,14 +32,14 @@ export interface Config {
   readonly generateDust: boolean;
 }
 
-export const currentDir = path.resolve(new URL(import.meta.url).pathname, '..');
+export const currentDir = path.dirname(fileURLToPath(import.meta.url));
 
 export class StandaloneConfig implements Config {
   getEnvironment(logger: Logger): TestEnvironment {
     return getTestEnvironment(logger) as TestEnvironment;
   }
   privateStateStoreName = 'bboard-private-state';
-  logDir = path.resolve(currentDir, '..', 'logs', 'standalone', `${new Date().toISOString()}.log`);
+  logDir = path.resolve(currentDir, '..', 'logs', 'standalone', `${safeLogStamp()}.log`);
   zkConfigPath = path.resolve(currentDir, '..', '..', 'contract', 'src', 'managed', 'bboard');
   generateDust = false;
 }
@@ -49,7 +50,7 @@ export class PreviewRemoteConfig implements Config {
     return new PreviewTestEnvironment(logger);
   }
   privateStateStoreName = 'bboard-private-state';
-  logDir = path.resolve(currentDir, '..', 'logs', 'preview-remote', `${new Date().toISOString()}.log`);
+  logDir = path.resolve(currentDir, '..', 'logs', 'preview-remote', `${safeLogStamp()}.log`);
   zkConfigPath = path.resolve(currentDir, '..', '..', 'contract', 'src', 'managed', 'bboard');
   generateDust = true;
 }
@@ -60,9 +61,14 @@ export class PreprodRemoteConfig implements Config {
     return new PreprodTestEnvironment(logger);
   }
   privateStateStoreName = 'bboard-private-state';
-  logDir = path.resolve(currentDir, '..', 'logs', 'preprod-remote', `${new Date().toISOString()}.log`);
+  logDir = path.resolve(currentDir, '..', 'logs', 'preprod-remote', `${safeLogStamp()}.log`);
   zkConfigPath = path.resolve(currentDir, '..', '..', 'contract', 'src', 'managed', 'bboard');
   generateDust = true;
+}
+
+/** Windows-safe log filename (ISO timestamps contain `:`). */
+function safeLogStamp(): string {
+  return new Date().toISOString().replace(/[:.]/g, '-');
 }
 
 export class PreviewTestEnvironment extends RemoteTestEnvironment {
@@ -90,6 +96,21 @@ export class PreviewTestEnvironment extends RemoteTestEnvironment {
       proofServer: this.getProofServerUrl(),
     };
   }
+
+  healthCheck = async (): Promise<void> => {
+    this.logger.info('Performing env health check (15s timeouts; faucet skipped)');
+    const axios = (await import('axios')).default;
+    const cfg = (this as unknown as { environmentConfiguration: EnvironmentConfiguration }).environmentConfiguration;
+    const checks: Array<[string, string]> = [
+      ['node', `${cfg.node.replace(/\/$/, '')}/health`],
+      ['indexer', 'https://indexer.preview.midnight.network/ready'],
+      ['proof-server', `${cfg.proofServer.replace(/\/$/, '')}/health`],
+    ];
+    for (const [name, url] of checks) {
+      const res = await axios.get(url, { timeout: 15_000 });
+      this.logger.info(`Connected to ${name} ${url}: ${JSON.stringify(res.data)}`);
+    }
+  };
 }
 
 export class PreprodTestEnvironment extends RemoteTestEnvironment {
@@ -117,4 +138,23 @@ export class PreprodTestEnvironment extends RemoteTestEnvironment {
       proofServer: this.getProofServerUrl(),
     };
   }
+
+  /** testkit health uses 1s axios timeouts; indexer/faucet often exceed that. */
+  healthCheck = async (): Promise<void> => {
+    this.logger.info('Performing env health check (15s timeouts; faucet skipped)');
+    const axios = (await import('axios')).default;
+    // environmentConfiguration is private on the base class
+    const cfg = (this as unknown as { environmentConfiguration: EnvironmentConfiguration }).environmentConfiguration;
+    const nodeHealth = `${cfg.node.replace(/\/$/, '')}/health`;
+    const indexerReady = 'https://indexer.preprod.midnight.network/ready';
+    const proofHealth = `${cfg.proofServer.replace(/\/$/, '')}/health`;
+    for (const [name, url] of [
+      ['node', nodeHealth],
+      ['indexer', indexerReady],
+      ['proof-server', proofHealth],
+    ] as const) {
+      const res = await axios.get(url, { timeout: 15_000 });
+      this.logger.info(`Connected to ${name} ${url}: ${JSON.stringify(res.data)}`);
+    }
+  };
 }
