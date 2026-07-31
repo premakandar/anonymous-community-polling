@@ -10,13 +10,12 @@
 - [x] Preprod contract address published: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` (wallet sync/DUST friction noted in `docs/PREPROD_STATUS.md`)
 
 ## Level 2
-- [x] Lace connect path (unlock Lace, then deploy/join)
-- [x] Network + contract address from env / Settings override
-- [x] Call `post` / `takeDown` from UI
-- [x] Show public ledger state (message, status, sequence)
+- [x] Browser wallet connect (1AM / Lace) & network status in UI
+- [x] Contract / network via env / Settings override
+- [x] Call ZK circuits from frontend with loading / error handling
 - [x] Private secret never rendered as public UI content
-- [x] `.env.example` with `VITE_NETWORK_ID`, `VITE_CONTRACT_ADDRESS`, indexer/proof URLs
 - [x] Vercel-ready `vercel.json` (UI dist)
+- [x] Preprod deploy + post verified via 1AM; address in README
 
 ## Level 3
 - [x] Contract tests in `contract/`

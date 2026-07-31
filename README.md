@@ -13,12 +13,16 @@ An anonymous community bulletin board and survey-style signal board on the **[Mi
 
 ## Live Demo & Deployment
 
-- **Live Web Application**: [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/)
-- **Local App UI**: [http://localhost:5173/](http://localhost:5173/)
-- **Deployed Compact Contract Address (Preprod)**: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
-- **Live Video Demo**: [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ)
-- **GitHub**: [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling)
-- **Product Proposal**: [PROPOSAL.md](PROPOSAL.md)
+| Resource | Link / value |
+| --- | --- |
+| **Live Web Application** | [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/) |
+| **Local App UI** | [http://localhost:5173/](http://localhost:5173/) |
+| **Preprod Compact Contract** | `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` |
+| **Demo Video** | [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ) |
+| **GitHub** | [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling) |
+| **Product Proposal** | [PROPOSAL.md](PROPOSAL.md) |
+
+**Verified on Midnight Preprod:** deployed and posted via **1AM** wallet (synced, sponsored DUST). Sample on-chain message: `Hiii` (seq 1). On the live site, open **Board → Join** with the address above (faster than Deploy).
 
 ---
 
@@ -35,7 +39,7 @@ Session status, network badge, current public message, and board sequence.
 ![Dashboard](pulseboard-ui/public/dashboard.png)
 
 ### 3. Board — Deploy / Join / Post / Take-down
-Lace-connected deploy or join, anonymous post, and owner-only take-down.
+Browser wallet deploy or join, anonymous post, and owner-only take-down.
 
 ![Board](pulseboard-ui/public/board.png)
 
@@ -67,11 +71,11 @@ Full write-up: [PROPOSAL.md](PROPOSAL.md) · [docs/PRODUCT_PROPOSAL.md](./docs/P
 | `message` | Current public pulse text (when occupied) |
 | `state` | `VACANT` or `OCCUPIED` |
 | `sequence` | Board sequence counter |
-| `owner` | Opaque derived commitment (`Bytes<32>`) — not a Lace address |
+| `owner` | Opaque derived commitment (`Bytes<32>`) — not a wallet address |
 
 ### 2. What observers CANNOT learn (private witness / local state)
 
-- **Author identity**: Lace / `mn_addr_…` is not written as “author” on the board ledger
+- **Author identity**: `mn_addr_…` is not written as “author” on the board ledger
 - **`localSecretKey` preimage**: never disclosed, never stored on-chain
 - **Linkage** between fee-paying wallet activity and board authorship beyond network-layer metadata
 
@@ -90,9 +94,9 @@ More detail: [docs/PRIVACY_MODEL.md](./docs/PRIVACY_MODEL.md)
 - **OS**: Windows / macOS / Linux (WSL2 recommended for Compact / Docker on Windows)
 - **Node.js**: **24.11+** (see [`.nvmrc`](./.nvmrc))
 - **npm**: 10+
-- **Docker**: Active daemon for the proof server on port **6300**
+- **Docker**: Active daemon for a local proof server on port **6300** (local undeployed / Lace proving)
 - **Compact**: `compactc` **0.31.x** (language 0.23)
-- **Wallet**: [Lace](https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk) (Midnight Preprod / undeployed as needed)
+- **Wallet**: [1AM](https://1am.xyz/) (verified on Preprod) and/or [Lace](https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk)
 
 ---
 
@@ -143,28 +147,34 @@ Health check: [http://localhost:6300/health](http://localhost:6300/health)
 ### 2. Launch web UI
 
 ```bash
+# Local undeployed (default .env.example values)
 npm run dev
-# or: npm run dev --workspace=@midnight-ntwrk/pulseboard-ui
+
+# Or Preprod against public indexer:
+Copy-Item pulseboard-ui/.env.preprod pulseboard-ui/.env -Force   # PowerShell
+npm run dev --workspace=@midnight-ntwrk/pulseboard-ui
 ```
 
-Open **[http://localhost:5173/](http://localhost:5173/)**. Unlock Lace, point Lace’s proof server at `http://localhost:6300` for local proving, then **Deploy board** / **Join**, **Post**, and **Take down**.
+Open **[http://localhost:5173/](http://localhost:5173/)**.
 
-**Preprod contract address** (join from UI / Settings):
+1. Unlock **1AM** or **Lace** on the matching network (`undeployed` or **Preprod**).
+2. Prefer **Join** with the published Preprod address below, or **Deploy board** (ZK prove can take several minutes).
+3. **Post** / **Take down** and approve wallet popups.
+
+**Preprod contract address:**
 
 `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 
-### Environment (`pulseboard-ui/.env.example`)
+### Environment (`pulseboard-ui/.env.example` / `.env.preprod`)
 
 | Variable | Purpose |
 | --- | --- |
 | `VITE_NETWORK_ID` | `undeployed` / `preview` / `preprod` |
-| `VITE_CONTRACT_ADDRESS` | Optional default join address |
+| `VITE_CONTRACT_ADDRESS` | Default join address |
 | `VITE_INDEXER_URI` | Indexer GraphQL |
 | `VITE_INDEXER_WS_URI` | Indexer websocket |
-| `VITE_PROOF_SERVER_URL` | e.g. `http://127.0.0.1:6300` |
+| `VITE_PROOF_SERVER_URL` | Local `http://127.0.0.1:6300` or Preprod remote |
 | `VITE_LOGGING_LEVEL` | `info` / `trace` |
-
-For Preprod UI: copy `pulseboard-ui/.env.preprod` → `pulseboard-ui/.env`.
 
 ### CLI (optional)
 
@@ -180,18 +190,27 @@ Fund the printed `mn_addr_…` from the [Preprod faucet](https://midnight-tmnigh
 
 ## Preview / Preprod Deployment Status
 
-- **Vercel production**: [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/)
-- **Published Preprod contract address**: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
+| Item | Status |
+| --- | --- |
+| **Vercel production** | [pulseboard-ruby.vercel.app](https://pulseboard-ruby.vercel.app/) |
+| **Preprod contract** | `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` |
+| **Browser deploy path** | **Verified with 1AM** (Preprod, sponsored DUST) — deploy + post |
+| **Lace path** | Supported; local proof server / Generate tDUST can hang on some setups |
+| **CLI Node sync** | Optional / fragile on Preprod (`Wallet.Sync` / dust) |
 
-### Status & troubleshooting notice
+### Vercel production env (baked at build)
 
-- **Faucet**: Preprod tNight funding via [Nethermind faucet](https://midnight-tmnight-preprod.nethermind.dev/) works with `mn_addr_preprod1…` addresses.
-- **Wallet / DUST / sync**: Midnight Preprod wallet sync and tDUST generation (Lace / Node SDK) can delay or timeout. **1AM on Preprod** (sponsored DUST) successfully deployed and posted for this project when Lace proof-server/DUST was blocked.
-- **Resolution**: Full-stack compile, ZK artifacts, unit tests, CLI, browser UI, CI, Vercel demo, and a live Preprod board address are provided. Prefer **1AM (Preprod, synced)** or local undeployed when Lace Generate tDUST hangs. See [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) and [`docs/LACE_PREPROD_DEPLOY.md`](./docs/LACE_PREPROD_DEPLOY.md).
+| Variable | Value |
+| --- | --- |
+| `VITE_NETWORK_ID` | `preprod` |
+| `VITE_CONTRACT_ADDRESS` | `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` |
+| `VITE_INDEXER_URI` | `https://indexer.preprod.midnight.network/api/v4/graphql` |
+| `VITE_INDEXER_WS_URI` | `wss://indexer.preprod.midnight.network/api/v4/graphql/ws` |
+| `VITE_PROOF_SERVER_URL` | `https://proof-server.preprod.midnight.network` |
 
-### Vercel notes
+Deploy note: Deploy on Preprod builds a ZK proof and can take **2–5+ minutes**. Use **Join** with the published address for a quick demo.
 
-Root Directory may be `pulseboard-ui`. Use `pulseboard-ui/vercel.json` (install from monorepo root). Commit `contract/src/managed/` so the host does not need `compactc`. Set `VITE_*` in the Vercel project.
+More detail: [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) · [`docs/LACE_PREPROD_DEPLOY.md`](./docs/LACE_PREPROD_DEPLOY.md)
 
 ---
 
@@ -233,7 +252,7 @@ vercel.json       Deploy config
 
 ### Level 2
 
-- [x] Lace wallet connect path & network status in UI
+- [x] Browser wallet connect (1AM / Lace) & network status in UI
 - [x] Contract / network via env (`.env.example`) and Settings override
 - [x] Call ZK circuits from frontend with loading / error handling
 - [x] Private secret never rendered as public UI content
@@ -248,6 +267,7 @@ vercel.json       Deploy config
 - [x] Demo video: [YouTube](https://youtu.be/UpCOUF-9nWQ)
 - [x] Live demo: [Vercel](https://pulseboard-ruby.vercel.app/)
 - [x] Screenshots in README
+- [x] Preprod deploy + post verified (1AM)
 
 Also see [`docs/SUBMISSION_CHECKLIST.md`](./docs/SUBMISSION_CHECKLIST.md).
 
@@ -255,7 +275,7 @@ Also see [`docs/SUBMISSION_CHECKLIST.md`](./docs/SUBMISSION_CHECKLIST.md).
 
 ## Built with
 
-compactc **0.31.x** · Midnight.js **4.1.x** · DApp Connector **4.x** · proof server `midnightntwrk/proof-server` (local `:6300`)
+compactc **0.31.x** · Midnight.js **4.1.x** · DApp Connector **4.x** · proof server `midnightntwrk/proof-server` (local `:6300` or Preprod remote)
 
 Useful docs: [bulletin-board example](https://docs.midnight.network/examples/dapps/bboard) · [support matrix](https://docs.midnight.network/relnotes/support-matrix) · [Compact](https://docs.midnight.network/compact/writing)
 

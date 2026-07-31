@@ -180,7 +180,9 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
   private async deployDeployment(deployment: BehaviorSubject<BoardDeployment>): Promise<void> {
     try {
       const providers = await this.getProviders();
+      this.logger.info('Starting contract deploy (ZK prove can take several minutes on Preprod)…');
       const api = await BBoardAPI.deploy(providers, this.logger);
+      this.logger.info({ address: api.deployedContractAddress }, 'Deploy finished');
 
       deployment.next({
         status: 'deployed',
@@ -200,7 +202,9 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
   ): Promise<void> {
     try {
       const providers = await this.getProviders();
+      this.logger.info({ contractAddress }, 'Joining existing board via indexer…');
       const api = await BBoardAPI.join(providers, contractAddress, this.logger);
+      this.logger.info({ address: api.deployedContractAddress }, 'Join finished');
 
       deployment.next({
         status: 'deployed',
@@ -274,9 +278,11 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
           logger.info({ tx, ttl }, 'Balancing transaction via wallet');
 
           const dust = await connectedAPI.getDustBalance();
+          // 1AM may sponsor fees while reported balance is 0 — still attempt balanceTx.
           if (dust.balance <= 0n) {
-            throw new Error(
-              'Lace has 0 tDUST. Open Lace → Tokens → Generate tDUST (needs faucet tNight first), wait until DUST > 0, then Deploy again.',
+            logger.warn(
+              { dustBalance: dust.balance.toString() },
+              'Reported DUST is 0; continuing (wallet may sponsor fees)',
             );
           }
 

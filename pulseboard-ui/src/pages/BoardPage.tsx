@@ -98,8 +98,9 @@ export function BoardPage() {
           {error ? <p className="text-sm text-[var(--danger)] lg:col-span-2">{error}</p> : null}
           {status === 'connecting' ? (
             <p className="flex items-center gap-2 text-sm text-[var(--ink-muted)] lg:col-span-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Connecting Lace and resolving the board…
+              <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+              Wallet connected. Deploy builds a ZK proof (often 2–5+ minutes). Prefer Join if you already have an
+              address — that is much faster.
             </p>
           ) : null}
         </div>
