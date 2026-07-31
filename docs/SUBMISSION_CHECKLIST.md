@@ -7,7 +7,7 @@
 - [x] Managed artifacts under `contract/src/managed/bboard/`
 - [x] CLI deploy/join/post/takeDown paths
 - [x] README setup + compile + local run docs
-- [x] Preprod contract address published: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6` (wallet sync/DUST friction noted in `docs/PREPROD_STATUS.md`)
+- [x] Preprod contract address published: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` (wallet sync/DUST friction noted in `docs/PREPROD_STATUS.md`)
 
 ## Level 2
 - [x] Lace connect path (unlock Lace, then deploy/join)

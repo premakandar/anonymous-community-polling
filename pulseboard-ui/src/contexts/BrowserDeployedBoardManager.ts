@@ -333,12 +333,18 @@ const isCompatibleWallet = (wallet: unknown): wallet is InitialAPI =>
   'apiVersion' in wallet &&
   semver.satisfies((wallet as InitialAPI).apiVersion, COMPATIBLE_CONNECTOR_API_VERSION);
 
-/** Prefer Lace (`mnLace`) so 1AM does not win when both extensions are installed. */
+/**
+ * Prefer a non-Lace connector when several are installed (1AM Preprod + sponsored DUST
+ * worked for deploy/post here; Lace often stalls on local proof server / tDUST).
+ */
 const getPreferredCompatibleWallet = (): InitialAPI | undefined => {
   if (!window.midnight) return undefined;
-  const lace = window.midnight.mnLace;
-  if (isCompatibleWallet(lace)) return lace;
-  return Object.values(window.midnight).find(isCompatibleWallet);
+  const entries = Object.entries(window.midnight).filter((entry): entry is [string, InitialAPI] =>
+    isCompatibleWallet(entry[1]),
+  );
+  const nonLace = entries.find(([key]) => key !== 'mnLace');
+  if (nonLace) return nonLace[1];
+  return entries[0]?.[1];
 };
 
 /** @internal */

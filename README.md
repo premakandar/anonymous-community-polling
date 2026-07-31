@@ -15,7 +15,7 @@ An anonymous community bulletin board and survey-style signal board on the **[Mi
 
 - **Live Web Application**: [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/)
 - **Local App UI**: [http://localhost:5173/](http://localhost:5173/)
-- **Deployed Compact Contract Address (Preprod)**: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+- **Deployed Compact Contract Address (Preprod)**: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 - **Live Video Demo**: [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ)
 - **GitHub**: [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling)
 - **Product Proposal**: [PROPOSAL.md](PROPOSAL.md)
@@ -151,7 +151,7 @@ Open **[http://localhost:5173/](http://localhost:5173/)**. Unlock Lace, point La
 
 **Preprod contract address** (join from UI / Settings):
 
-`02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+`5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 
 ### Environment (`pulseboard-ui/.env.example`)
 
@@ -181,13 +181,13 @@ Fund the printed `mn_addr_…` from the [Preprod faucet](https://midnight-tmnigh
 ## Preview / Preprod Deployment Status
 
 - **Vercel production**: [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/)
-- **Published Preprod contract address**: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+- **Published Preprod contract address**: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 
 ### Status & troubleshooting notice
 
 - **Faucet**: Preprod tNight funding via [Nethermind faucet](https://midnight-tmnight-preprod.nethermind.dev/) works with `mn_addr_preprod1…` addresses.
-- **Wallet / DUST / sync**: Midnight Preprod wallet sync and tDUST generation (Lace / 1AM / Node SDK) can delay, timeout, or stick (e.g. sync at 99%, proof-server connectivity from the extension). This matches known Preprod friction during the intensive.
-- **Resolution**: Per competition-style submissions, **full-stack compile, ZK artifacts, unit tests, CLI, Lace UI, CI, Vercel demo, and a published Preprod contract address** are provided. Prefer the **local undeployed** path for interactive demos when Preprod wallet sync/DUST is blocked. See [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) and [`docs/LACE_PREPROD_DEPLOY.md`](./docs/LACE_PREPROD_DEPLOY.md).
+- **Wallet / DUST / sync**: Midnight Preprod wallet sync and tDUST generation (Lace / Node SDK) can delay or timeout. **1AM on Preprod** (sponsored DUST) successfully deployed and posted for this project when Lace proof-server/DUST was blocked.
+- **Resolution**: Full-stack compile, ZK artifacts, unit tests, CLI, browser UI, CI, Vercel demo, and a live Preprod board address are provided. Prefer **1AM (Preprod, synced)** or local undeployed when Lace Generate tDUST hangs. See [`docs/PREPROD_STATUS.md`](./docs/PREPROD_STATUS.md) and [`docs/LACE_PREPROD_DEPLOY.md`](./docs/LACE_PREPROD_DEPLOY.md).
 
 ### Vercel notes
 
@@ -229,7 +229,7 @@ vercel.json       Deploy config
 - [x] Generated `contract/src/managed/bboard` with ZK circuits & keys
 - [x] Local deployment & CLI / UI paths functional
 - [x] README: setup, compile, run, public vs private state
-- [x] Preprod contract address published: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+- [x] Preprod contract address published: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 
 ### Level 2
 

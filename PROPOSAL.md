@@ -78,7 +78,7 @@ export circuit takeDown(): Opaque<"string"> {
 ## Deployment & Verification
 
 - **Network**: Midnight Preprod Testnet
-- **Local Preprod Address**: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+- **Local Preprod Address**: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 - **Live Frontend**: [pulseboard-ruby.vercel.app](https://pulseboard-ruby.vercel.app/)
 - **Demo Video**: [YouTube](https://youtu.be/UpCOUF-9nWQ)
 
@@ -89,7 +89,7 @@ export circuit takeDown(): Opaque<"string"> {
 - [x] Compact ZK circuit written in `v0.31.1` with private witness isolation
 - [x] Automated contract test suite passing (`npm test`)
 - [x] GitHub Actions CI (`ci.yaml`) compiling contract, api, cli, ui, and running tests
-- [x] Local Preprod contract address published: `02003c94f1b8a72e61a8d052b49c71e839f201d467812e59a03b5478d1f8a2e6`
+- [x] Local Preprod contract address published: `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac`
 - [x] Full-stack web frontend live on Vercel with Lace wallet integration
 - [x] Privacy model documented and enforced in contract
 - [x] Demo video available: [YouTube](https://youtu.be/UpCOUF-9nWQ)
