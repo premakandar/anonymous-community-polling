@@ -73,3 +73,6 @@ preprod-deployment.json
 .preprod-wallet.env
 .midnight-wallet-state/
 
+
+.vercel
+.env*

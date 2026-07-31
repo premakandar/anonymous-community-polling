@@ -217,7 +217,7 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
 
 /** @internal */
 const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
-  const networkId = import.meta.env.VITE_NETWORK_ID;
+  const networkId = import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preprod' : 'undeployed');
   const connectedAPI = await connectToWallet(logger, networkId);
   const zkConfigPath = window.location.origin;
   const keyMaterialProvider = new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window));
@@ -376,7 +376,7 @@ const connectToWallet = (logger: Logger, networkId: string): Promise<ConnectedAP
       }),
       concatMap(async (initialAPI) => {
         // Lace shows a permission popup; do not race this with a short timeout.
-        logger.info('Waiting for Lace authorization popup — approve localhost:5173');
+        logger.info('Waiting for wallet authorization popup — approve this site');
         const connectedAPI = await initialAPI.connect(requestedNetwork);
         const connectionStatus = await connectedAPI.getConnectionStatus();
         logger.info(connectionStatus, 'Wallet connector API enabled status');

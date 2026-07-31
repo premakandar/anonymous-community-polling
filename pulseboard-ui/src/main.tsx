@@ -7,7 +7,7 @@ import '@midnight-ntwrk/dapp-connector-api';
 import App from './App';
 import { logger } from './logger';
 
-const networkId = import.meta.env.VITE_NETWORK_ID || 'undeployed';
+const networkId = import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preprod' : 'undeployed');
 setNetworkId(networkId);
 logger.trace(`networkId = ${networkId}`);
 
