@@ -221,7 +221,7 @@ export class BrowserDeployedBoardManager implements DeployedBoardAPIProvider {
 
 /** @internal */
 const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => {
-  const networkId = import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preprod' : 'undeployed');
+  const networkId = import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preview' : 'undeployed');
   const connectedAPI = await connectToWallet(logger, networkId);
   const zkConfigPath = window.location.origin;
   const keyMaterialProvider = new FetchZkConfigProvider<BBoardCircuitKeys>(zkConfigPath, fetch.bind(window));
@@ -240,11 +240,19 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
 
   const indexerUri = import.meta.env.VITE_INDEXER_URI?.trim() || config.indexerUri;
   const indexerWsUri = import.meta.env.VITE_INDEXER_WS_URI?.trim() || config.indexerWsUri;
-  const proverUri = import.meta.env.VITE_PROOF_SERVER_URL?.trim() || config.proverServerUri;
+  let proverUri = import.meta.env.VITE_PROOF_SERVER_URL?.trim() || config.proverServerUri || '';
+
+  // Remote proof server blocks browser CORS — use Vite/Vercel same-origin proxy.
+  if (
+    typeof window !== 'undefined' &&
+    /proof-server\.(preprod|preview)\.midnight\.network/i.test(proverUri)
+  ) {
+    proverUri = `${window.location.origin}/proof-server`;
+  }
 
   if (!indexerUri || !indexerWsUri || !proverUri) {
     throw new Error(
-      'Missing indexer/prover URIs. Unlock Lace or set VITE_INDEXER_URI, VITE_INDEXER_WS_URI, and VITE_PROOF_SERVER_URL.',
+      'Missing indexer/prover URIs. Unlock 1AM/Lace or set VITE_INDEXER_URI, VITE_INDEXER_WS_URI, and VITE_PROOF_SERVER_URL.',
     );
   }
 
@@ -355,7 +363,7 @@ const getPreferredCompatibleWallet = (): InitialAPI | undefined => {
 
 /** @internal */
 const connectToWallet = (logger: Logger, networkId: string): Promise<ConnectedAPI> => {
-  const requestedNetwork = (networkId || 'preprod').toLowerCase();
+  const requestedNetwork = (networkId || 'preview').toLowerCase();
   return firstValueFrom(
     fnPipe(
       interval(100),

@@ -26,7 +26,7 @@ export function loadConfig(): AppConfig {
   const envAddress = import.meta.env.VITE_CONTRACT_ADDRESS?.trim() || null;
   const override = localStorage.getItem(CONTRACT_KEY)?.trim() || null;
   return {
-    networkId: import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preprod' : 'undeployed'),
+    networkId: import.meta.env.VITE_NETWORK_ID || (import.meta.env.PROD ? 'preview' : 'undeployed'),
     contractAddress: override || envAddress,
     indexerUri: import.meta.env.VITE_INDEXER_URI?.trim() || null,
     indexerWsUri: import.meta.env.VITE_INDEXER_WS_URI?.trim() || null,

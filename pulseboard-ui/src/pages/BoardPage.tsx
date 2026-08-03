@@ -50,7 +50,7 @@ export function BoardPage() {
     <div>
       <PageHeader
         title="Board"
-        description="Deploy or join a PulseBoard, then post or take down with a zero-knowledge proof. Lace must be unlocked."
+        description="Deploy or join a PulseBoard on Preview, then post or take down with a ZK proof. Prefer 1AM unlocked + synced."
       />
 
       {status !== 'ready' ? (
@@ -58,8 +58,8 @@ export function BoardPage() {
           <Surface>
             <h2 className="font-display text-xl">Deploy a new board</h2>
             <p className="mt-2 text-sm text-[var(--ink-muted)]">
-              Creates a fresh bulletin contract. Your secret key is generated locally and never written to the public
-              ledger.
+              Creates a fresh bulletin contract on Preview. Your secret key is generated locally and never written
+              to the public ledger. Approve the 1AM popup once — do not double-click.
             </p>
             <Button className="mt-6" onClick={deploy} disabled={status === 'connecting'}>
               {status === 'connecting' ? (

@@ -5,9 +5,17 @@ An anonymous community bulletin board and survey-style signal board on the **[Mi
 [![CI](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml/badge.svg)](https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=flat-square&logo=vercel)](https://pulseboard-ruby.vercel.app/)
 [![Demo Video](https://img.shields.io/badge/Demo_Video-YouTube-FF0000?style=flat-square&logo=youtube)](https://youtu.be/UpCOUF-9nWQ)
-[![Midnight](https://img.shields.io/badge/Midnight-ZK-1c7a4c)](https://midnight.network)
-[![Level 3](https://img.shields.io/badge/Rise--In-Anonymous%20Feedback%20%2F%20Survey-0f766e)](PROPOSAL.md)
-[![license](https://img.shields.io/badge/license-MIT-111111)](./package.json)
+[![Network](https://img.shields.io/badge/Network-Preview-0ea5e9?style=flat-square)](docs/PREVIEW_STATUS.md)
+[![Midnight](https://img.shields.io/badge/Midnight-ZK-1c7a4c?style=flat-square)](https://midnight.network)
+[![Level 3](https://img.shields.io/badge/Rise--In-Anonymous%20Feedback%20%2F%20Survey-0f766e?style=flat-square)](PROPOSAL.md)
+[![license](https://img.shields.io/badge/license-MIT-111111?style=flat-square)](./package.json)
+
+<p>
+  <a href="https://pulseboard-ruby.vercel.app/"><img src="https://img.shields.io/badge/Open_Live_App-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Open Live App" /></a>
+  <a href="https://youtu.be/UpCOUF-9nWQ"><img src="https://img.shields.io/badge/Watch_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo" /></a>
+  <a href="https://preview.midnightexplorer.com/contracts/0x6e9e311e392ae783311ba68b622c0458a969b298fd5fa991e56d945e63a96b05"><img src="https://img.shields.io/badge/View_on_Explorer-0ea5e9?style=for-the-badge" alt="View on Explorer" /></a>
+  <a href="https://github.com/premakandar/anonymous-community-polling/actions/workflows/ci.yaml"><img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions" /></a>
+</p>
 
 ---
 
@@ -16,20 +24,25 @@ An anonymous community bulletin board and survey-style signal board on the **[Mi
 | Resource | Link / value |
 | --- | --- |
 | **Live Web Application** | [https://pulseboard-ruby.vercel.app/](https://pulseboard-ruby.vercel.app/) |
-| **Local App UI** | [http://localhost:5173/](http://localhost:5173/) |
-| **Preprod Compact Contract** | `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` |
+| **Local App UI** | [http://localhost:5176/](http://localhost:5176/) (`npm run dev` with `.env.preview`) |
+| **Preview Compact Contract** | `6e9e311e392ae783311ba68b622c0458a969b298fd5fa991e56d945e63a96b05` |
+| **Explorer** | [Preview contract](https://preview.midnightexplorer.com/contracts/0x6e9e311e392ae783311ba68b622c0458a969b298fd5fa991e56d945e63a96b05) |
+| **Preprod Compact Contract (historical)** | `5847b1dc60804587963b6bbcba8986889e8302c420d83238004cf194babb5eac` |
 | **Demo Video** | [https://youtu.be/UpCOUF-9nWQ](https://youtu.be/UpCOUF-9nWQ) |
 | **GitHub** | [premakandar/anonymous-community-polling](https://github.com/premakandar/anonymous-community-polling) |
 | **Product Proposal** | [PROPOSAL.md](PROPOSAL.md) |
+| **Preview notes** | [docs/PREVIEW_STATUS.md](docs/PREVIEW_STATUS.md) |
 
-**Verified on Midnight Preprod:** deployed and posted via **1AM** wallet (synced, sponsored DUST). Sample on-chain message: `Hiii` (seq 1). On the live site, open **Board → Join** with the address above (faster than Deploy).
+**Verified on Midnight Preview:** deployed via **1AM**. Prefer **Board → Join** with the Preview address below (faster than Deploy). Preprod address is historical only.
+
+**Preview contract:** `6e9e311e392ae783311ba68b622c0458a969b298fd5fa991e56d945e63a96b05`
 
 ---
 
 ## Screenshots & UI Showcase
 
-### 1. Landing Page
-Live public ledger preview and product entry for the anonymous community board.
+### 1. Landing
+Product entry and live public-ledger preview for the anonymous community board.
 
 ![Landing](pulseboard-ui/public/landing.png)
 
@@ -38,15 +51,18 @@ Session status, network badge, current public message, and board sequence.
 
 ![Dashboard](pulseboard-ui/public/dashboard.png)
 
-### 3. Board — Deploy / Join / Post / Take-down
-Browser wallet deploy or join, anonymous post, and owner-only take-down.
+### 3. Board
+Deploy or join on Preview, anonymous post, and owner-only take-down.
 
 ![Board](pulseboard-ui/public/board.png)
 
-### 4. History & Settings
-Local browser activity trail plus contract / indexer / proof endpoint overrides.
+### 4. History
+Local browser activity trail for deploy, join, post, and take-down.
 
 ![History](pulseboard-ui/public/history.png)
+
+### 5. Settings
+Contract address (auto-filled after Deploy/Join), indexer, and proof-server endpoints.
 
 ![Settings](pulseboard-ui/public/settings.png)
 

@@ -68,7 +68,12 @@ export function BoardSessionProvider({ children }: { children: ReactNode }) {
         }
         setApi(deployment.api);
         setStatus('ready');
-        pushActivity('join', 'Board ready', deployment.api.deployedContractAddress);
+        const addr = deployment.api.deployedContractAddress;
+        if (addr) {
+          saveContractAddressOverride(addr);
+          setConfig(loadConfig());
+        }
+        pushActivity('join', 'Board ready', addr);
       });
 
       unsubRef.current = () => sub.unsubscribe();

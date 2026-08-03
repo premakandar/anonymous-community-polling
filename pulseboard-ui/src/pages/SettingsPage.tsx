@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PageHeader, Surface, Badge, Input } from '../components/ui/surface';
 import { Button } from '../components/ui/button';
 import { useBoardSession } from '../contexts/BoardSessionContext';
@@ -6,14 +6,22 @@ import { networkLabel, LACE_STORE_URL } from '../config';
 
 export function SettingsPage() {
   const { config, setContractAddress, clearContractOverride, api } = useBoardSession();
-  const [address, setAddress] = useState(config.contractAddress ?? '');
+  const [address, setAddress] = useState(
+    () => config.contractAddress ?? api?.deployedContractAddress ?? '',
+  );
   const [saved, setSaved] = useState(false);
+
+  // Keep the input filled from env/localStorage override or live board session.
+  useEffect(() => {
+    const next = config.contractAddress ?? api?.deployedContractAddress ?? '';
+    setAddress(next);
+  }, [config.contractAddress, api?.deployedContractAddress]);
 
   return (
     <div>
       <PageHeader
         title="Settings"
-        description="Contract address override and environment endpoints used by the Lace-backed providers."
+        description="Contract address override and environment endpoints used by 1AM/Lace-backed providers."
       />
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -21,7 +29,7 @@ export function SettingsPage() {
           <h2 className="font-display text-xl">Contract address</h2>
           <p className="mt-2 text-sm text-[var(--ink-muted)]">
             Override <code className="font-mono text-xs">VITE_CONTRACT_ADDRESS</code> for this browser. Used as the
-            default join target.
+            default join target. Fills automatically after Deploy / Join.
           </p>
           <Input
             className="mt-4 font-mono text-xs"
@@ -47,12 +55,25 @@ export function SettingsPage() {
               variant="outline"
               onClick={() => {
                 clearContractOverride();
-                setAddress('');
+                setAddress(api?.deployedContractAddress ?? '');
                 setSaved(false);
               }}
             >
               Clear
             </Button>
+            {api?.deployedContractAddress && address !== api.deployedContractAddress ? (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => {
+                  setAddress(api.deployedContractAddress);
+                  setContractAddress(api.deployedContractAddress);
+                  setSaved(true);
+                }}
+              >
+                Use active session
+              </Button>
+            ) : null}
           </div>
           {saved ? <p className="mt-3 text-sm text-[var(--ok)]">Saved.</p> : null}
           {api ? (
@@ -71,12 +92,12 @@ export function SettingsPage() {
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Indexer</dt>
-              <dd className="max-w-[60%] break-all text-right font-mono text-xs">{config.indexerUri ?? 'From Lace'}</dd>
+              <dd className="max-w-[60%] break-all text-right font-mono text-xs">{config.indexerUri ?? 'From wallet'}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Proof server</dt>
               <dd className="max-w-[60%] break-all text-right font-mono text-xs">
-                {config.proofServerUri ?? 'From Lace'}
+                {config.proofServerUri ?? 'From wallet'}
               </dd>
             </div>
             <div className="flex justify-between gap-4">
@@ -93,10 +114,11 @@ export function SettingsPage() {
             Install / open Lace →
           </a>
           <p className="mt-4 text-xs leading-relaxed text-[var(--ink-muted)]">
-            Unlock Lace before deploy/join. For local undepolyed, point Lace proof server to{' '}
+            Prefer <strong>1AM</strong> on <strong>Preview</strong> (synced). Unlock before deploy/join. For local
+            undeployed, point the wallet proof server to{' '}
             <code className="font-mono">http://localhost:6300</code> and run the project Docker stack.
           </p>
-          <Badge tone="warn">Preprod sync may block — see README</Badge>
+          <Badge tone="ok">Preview · Rise-In July migration</Badge>
         </Surface>
       </div>
     </div>

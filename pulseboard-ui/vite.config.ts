@@ -51,12 +51,21 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      'cross-fetch': path.resolve(__dirname, 'src/shims/cross-fetch-offset-fix.ts'),
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.wasm'],
     mainFields: ['browser', 'module', 'main'],
   },
   server: {
-    port: 5173,
+    port: 5176,
     strictPort: true,
+    proxy: {
+      '/proof-server': {
+        target: 'https://proof-server.preview.midnight.network',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p) => p.replace(/^\/proof-server/, ''),
+      },
+    },
   },
 });
