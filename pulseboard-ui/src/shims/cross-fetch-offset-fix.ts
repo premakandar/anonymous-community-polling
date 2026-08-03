@@ -10,8 +10,14 @@
 
 type FetchArgs = [input: RequestInfo | URL, init?: RequestInit];
 
+type GraphqlBody = {
+  query?: unknown;
+  variables?: Record<string, unknown>;
+  [k: string]: unknown;
+};
+
 function isEmptyPlainObject(value: unknown): boolean {
-  return !!value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value as object).length === 0;
+  return !!value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0;
 }
 
 /** True when GraphQL declares a non-null TransactionOffset (must not become null). */
@@ -50,9 +56,9 @@ function sanitizeOptionalOffset(offset: unknown): unknown {
 }
 
 function patchGraphqlBody(body: string): string {
-  let parsed: { query?: unknown; variables?: Record<string, unknown>; [k: string]: unknown };
+  let parsed: GraphqlBody;
   try {
-    parsed = JSON.parse(body);
+    parsed = JSON.parse(body) as GraphqlBody;
   } catch {
     return body;
   }

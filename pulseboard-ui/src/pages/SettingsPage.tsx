@@ -6,9 +6,7 @@ import { networkLabel, LACE_STORE_URL } from '../config';
 
 export function SettingsPage() {
   const { config, setContractAddress, clearContractOverride, api } = useBoardSession();
-  const [address, setAddress] = useState(
-    () => config.contractAddress ?? api?.deployedContractAddress ?? '',
-  );
+  const [address, setAddress] = useState(() => config.contractAddress ?? api?.deployedContractAddress ?? '');
   const [saved, setSaved] = useState(false);
 
   // Keep the input filled from env/localStorage override or live board session.
@@ -92,7 +90,9 @@ export function SettingsPage() {
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Indexer</dt>
-              <dd className="max-w-[60%] break-all text-right font-mono text-xs">{config.indexerUri ?? 'From wallet'}</dd>
+              <dd className="max-w-[60%] break-all text-right font-mono text-xs">
+                {config.indexerUri ?? 'From wallet'}
+              </dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-[var(--ink-faint)]">Proof server</dt>
@@ -115,8 +115,8 @@ export function SettingsPage() {
           </a>
           <p className="mt-4 text-xs leading-relaxed text-[var(--ink-muted)]">
             Prefer <strong>1AM</strong> on <strong>Preview</strong> (synced). Unlock before deploy/join. For local
-            undeployed, point the wallet proof server to{' '}
-            <code className="font-mono">http://localhost:6300</code> and run the project Docker stack.
+            undeployed, point the wallet proof server to <code className="font-mono">http://localhost:6300</code> and
+            run the project Docker stack.
           </p>
           <Badge tone="ok">Preview · Rise-In July migration</Badge>
         </Surface>

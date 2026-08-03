@@ -58,8 +58,8 @@ export function BoardPage() {
           <Surface>
             <h2 className="font-display text-xl">Deploy a new board</h2>
             <p className="mt-2 text-sm text-[var(--ink-muted)]">
-              Creates a fresh bulletin contract on Preview. Your secret key is generated locally and never written
-              to the public ledger. Approve the 1AM popup once — do not double-click.
+              Creates a fresh bulletin contract on Preview. Your secret key is generated locally and never written to
+              the public ledger. Approve the 1AM popup once — do not double-click.
             </p>
             <Button className="mt-6" onClick={deploy} disabled={status === 'connecting'}>
               {status === 'connecting' ? (

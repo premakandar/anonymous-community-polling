@@ -243,10 +243,7 @@ const initializeProviders = async (logger: Logger): Promise<BBoardProviders> => 
   let proverUri = import.meta.env.VITE_PROOF_SERVER_URL?.trim() || config.proverServerUri || '';
 
   // Remote proof server blocks browser CORS — use Vite/Vercel same-origin proxy.
-  if (
-    typeof window !== 'undefined' &&
-    /proof-server\.(preprod|preview)\.midnight\.network/i.test(proverUri)
-  ) {
+  if (typeof window !== 'undefined' && /proof-server\.(preprod|preview)\.midnight\.network/i.test(proverUri)) {
     proverUri = `${window.location.origin}/proof-server`;
   }
 
